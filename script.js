@@ -36,9 +36,6 @@ function init(points) {
   directionalLight.position.set(1, 1, 1).normalize();
   scene.add(directionalLight);
 
-  const flatPointsArray = [];
-  points.forEach(p => flatPointsArray.push(p.X, p.Y, p.Z));
-
   const bandMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x48dcf6,
     transparent: true,
@@ -53,18 +50,17 @@ function init(points) {
   bandMesh.rotation.x = Math.PI / 2;
   scene.add(bandMesh);
 
-  const pointsMaterial = new THREE.PointsMaterial({
-    color: 0x5099d1,
-    size: 5,
-    transparent: true,
-    opacity: 0.8,
-    depthWrite: false
-  });
+  const circleMaterial = new THREE.MeshBasicMaterial({ color: 0x5099d1, side: THREE.DoubleSide });
+  const circleGeometry = new THREE.CircleGeometry(0.05, 32);
 
-  const pointsGeometry = new THREE.BufferGeometry();
-  pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(flatPointsArray, 3));
-  const pointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
-  scene.add(pointsMesh);
+  points.forEach(p => {
+    const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
+    circleMesh.position.set(p.X, p.Y, p.Z);
+    // Assuming the band is a sphere of radius 1, normalize the position to get the normal
+    const normal = circleMesh.position.clone().normalize();
+    circleMesh.lookAt(normal.add(circleMesh.position));
+    scene.add(circleMesh);
+  });
 
   function animate() {
     requestAnimationFrame(animate);
