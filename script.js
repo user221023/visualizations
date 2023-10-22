@@ -52,7 +52,7 @@ async function fetchData() {
         transparent: true,
         opacity: 0.667,
         emissive: lightColor,
-        emissiveIntensity: 1.0  // Adjust as needed
+        emissiveIntensity: 0.667  // Adjust as needed
     });
 
   
@@ -73,7 +73,7 @@ async function fetchData() {
         opacity: 0.667,
         side: THREE.DoubleSide,
         emissive: mainColor,
-        emissiveIntensity: 1.0  // Adjust as needed
+        emissiveIntensity: 0.667  // Adjust as needed
     });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
     bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
