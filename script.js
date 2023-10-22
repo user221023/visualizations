@@ -79,13 +79,10 @@ points.forEach((p, index) => {
   scene.add(circleMesh);
 });
 
-
   const bandGeometry = new THREE.SphereGeometry(1, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
   const bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
   bandMesh.rotation.x = Math.PI / 2;
   scene.add(bandMesh);
-
-  const circleGeometry = new THREE.CircleGeometry(0.05, 32);
 
   points.forEach((p, index) => {
     const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
