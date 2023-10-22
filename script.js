@@ -86,24 +86,27 @@ function generateSprite(color) {
         canvas.height / 2,
         canvas.width / 2
     );
-    gradient.addColorStop(0, 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',1)');
-    gradient.addColorStop(0.2, 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',1)');
-    gradient.addColorStop(0.4, 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',.6)');
+    var colorStyle = 'rgba(' + Math.round(color.r * 255) + ',' + Math.round(color.g * 255) + ',' + Math.round(color.b * 255) + ',1)';
+    gradient.addColorStop(0, colorStyle);
+    gradient.addColorStop(0.2, colorStyle);
+    gradient.addColorStop(0.4, colorStyle.replace('1)', '0.6)'));
     gradient.addColorStop(1, 'rgba(0,0,0,0)');
     context.fillStyle = gradient;
     context.fillRect(0, 0, canvas.width, canvas.height);
     return canvas;
 }
+
   
 for (var i = 0; i < points.length; i++) {
     // ... (previous code to create disks)
-
+    
     var glowMaterial = createGlowMaterial(new THREE.Color(mediumColor), 0.1);
     var glow = new THREE.Sprite(glowMaterial);
     glow.scale.set(0.2, 0.2, 1); // Adjust the size as needed
-    glow.position.copy(disk.position);
+    glow.position.set(points[i].X, points[i].Y, points[i].Z);
     scene.add(glow);
 }
+
 
             // Position the camera closer
             camera.position.z = 0.7;
