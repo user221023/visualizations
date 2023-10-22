@@ -29,7 +29,7 @@ async function fetchData() {
     var darkColor = 0x5099d1
     var mediumColor = 0x48dcf6
     var lightColor = 0x50fffb
-    var lightingColor = 0xb9fffd
+    var lightingColor = 0xebc1e6
 
     // Position the camera to see the lit side
     camera.position.set(2, 2, 2);  // Adjust x, y, z values as needed
