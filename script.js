@@ -51,6 +51,16 @@ async function fetchData() {
         flatPointsArray.push(p.X, p.Y, p.Z);
     });
 
+      // Define band material here or make sure it's accessible in this scope
+  var bandMaterial = new THREE.MeshPhysicalMaterial({
+    color: mediumColor,
+    transparent: true,
+    opacity: 0.8,
+    side: THREE.DoubleSide,
+    emissive: lightColor,
+    emissiveIntensity: 0.2
+  });
+    
     // Create the spherical band
     var bandRadius = 1;
     var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
