@@ -43,16 +43,15 @@ async function fetchData() {
             directionalLight.position.set(1, 1, 1).normalize();
             scene.add(directionalLight);
 
-            // Create a material for the spheres
-            var sphereMaterial = new THREE.MeshPhysicalMaterial({ color: mediumColor, transparent: true, opacity: 0.8 });
-
-            // Create spheres and add them to the scene
-            for (var i = 0; i < points.length; i++) {
-                var geometry = new THREE.SphereGeometry(0.02);  // Radius of 0.02
-                var sphere = new THREE.Mesh(geometry, sphereMaterial);
-                sphere.position.set(points[i].X, points[i].Y, points[i].Z);
-                scene.add(sphere);
-            }
+            // Create points
+  for (var i = 0; i < points.length; i++) {
+    var diskGeometry = new THREE.CircleGeometry(0.05, 32); // Radius of 0.05 and 32 segments
+    var diskMaterial = new THREE.MeshBasicMaterial({ color: mediumColor, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+    var disk = new THREE.Mesh(diskGeometry, diskMaterial);
+    disk.position.set(points[i].X, points[i].Y, points[i].Z);
+    disk.lookAt(new THREE.Vector3(0, 0, 0)); // Make the disk face towards the origin
+    scene.add(disk);
+}
 
             // Create the spherical band
             var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
