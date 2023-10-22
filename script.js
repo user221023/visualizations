@@ -43,7 +43,7 @@ async function fetchData() {
     scene.add(ambientLight);
 
     // Add Directional Light
-    var directionalLight = new THREE.DirectionalLight(lightColor, 0.667);
+    var directionalLight = new THREE.DirectionalLight(lightColor, 0.9);
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
