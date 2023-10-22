@@ -26,6 +26,7 @@ async function fetchData() {
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+    const mainColor = 0xFFFFFF
 
     // Position the camera to see the lit side
     camera.position.set(2, 2, 2);  // Adjust x, y, z values as needed
@@ -45,10 +46,10 @@ async function fetchData() {
     scene.add(directionalLight);
 
     var sphereMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x64B5F6,
+        color: mainColor,
         transparent: true,
         opacity: 0.5,
-        emissive: 0x64B5F6,
+        emissive: mainColor,
         emissiveIntensity: 1.0  // Adjust as needed
     });
 
@@ -65,11 +66,11 @@ async function fetchData() {
     var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
     var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
     var bandMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x64B5F6,
+        color: mainColor,
         transparent: true,
         opacity: 0.4,
         side: THREE.DoubleSide,
-        emissive: 0x64B5F6,
+        emissive: mainColor,
         emissiveIntensity: 1.0  // Adjust as needed
     });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
