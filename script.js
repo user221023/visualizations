@@ -27,7 +27,7 @@ async function fetchData() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     var mainColor = 0x5099D1
-    var lightColor = 0x50FFFB
+    var lightColor = 0xcafffd
 
 
     // Position the camera to see the lit side
