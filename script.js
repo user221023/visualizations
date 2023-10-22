@@ -73,22 +73,26 @@ vertexShader: `
   attribute float size;
   void main() {
     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_PointSize = size * (300.0 / -mvPosition.z) * 10.0; // increased size for visibility
+    gl_PointSize = 1.0
     gl_Position = projectionMatrix * mvPosition;
   }
 `,
+
 fragmentShader: `
   uniform vec3 color;
   void main() {
     vec2 coords = 2.0 * gl_PointCoord - 1.0; // Transform to [-1, 1] range
     float dist = dot(coords, coords);
-    if (dist > 1.0) discard; // This will make them flat
-    float alpha = 1.0 - smoothstep(0.8, 1.0, dist);
-    gl_FragColor = vec4(color, alpha);
+    if (dist > 1.0) discard; // Discard fragments outside the unit circle
+    gl_FragColor = vec4(color, 1.0); // Set alpha to 1.0 for a solid disc
   }
 `,
 
+depthTest: false,
 
+blending: THREE.NormalBlending,
+
+    
   blending: THREE.AdditiveBlending,
   depthTest: false,
   transparent: true
