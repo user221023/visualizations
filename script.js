@@ -82,10 +82,12 @@ fragmentShader: `
   void main() {
     vec2 coords = 2.0 * gl_PointCoord - 1.0; // Transform to [-1, 1] range
     float dist = dot(coords, coords);
+    if (dist > 1.0) discard; // This will make them flat
     float alpha = 1.0 - smoothstep(0.8, 1.0, dist);
     gl_FragColor = vec4(color, alpha);
   }
 `,
+
 
   blending: THREE.AdditiveBlending,
   depthTest: false,
