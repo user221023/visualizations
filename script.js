@@ -37,11 +37,11 @@ async function fetchData() {
     controls.update();
 
     // Add Ambient Light
-    var ambientLight = new THREE.AmbientLight(0x404040);
+    var ambientLight = new THREE.AmbientLight(0xb5f1fb);
     scene.add(ambientLight);
 
     // Add Directional Light
-    var directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.1);
+    var directionalLight = new THREE.DirectionalLight(0xb5f1fb, 0.1);
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
