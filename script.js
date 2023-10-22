@@ -23,7 +23,7 @@ async function fetchData() {
             document.body.appendChild(renderer.domElement);
 
             // Position the camera to see the lit side
-            camera.position.set(1, 2, 2);  // Adjust x, y, z values as needed
+            camera.position.set(1, 1, 2);  // Adjust x, y, z values as needed
             camera.lookAt(new THREE.Vector3(0, 0, 0));  // Looking at the origin, adjust as needed
 
             // Initialize OrbitControls
