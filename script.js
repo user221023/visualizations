@@ -26,7 +26,7 @@ async function fetchData() {
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    var mainColor = 0x48DCF6
+    var mainColor = 0x5099D1
     var lightColor = 0x50FFFB
 
 
@@ -72,7 +72,7 @@ async function fetchData() {
         transparent: true,
         opacity: 0.667,
         side: THREE.DoubleSide,
-        emissive: lightColor,
+        emissive: mainColor,
         emissiveIntensity: 1.0  // Adjust as needed
     });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
