@@ -61,29 +61,30 @@ const edgeMaterial = new THREE.ShaderMaterial({
   const circleMaterial = new THREE.MeshBasicMaterial({ color: 0x5099d1, side: THREE.DoubleSide });
   const circleGeometry = new THREE.CircleGeometry(0.05, 32);
 
-  points.forEach((p, index) => {
-    const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
-    circleMesh.position.set(p.X, p.Y, p.Z);
+points.forEach((p, index) => {
+  let circleMaterial = new THREE.MeshBasicMaterial({ color: 0x5099d1, side: THREE.DoubleSide });
+  const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
+  circleMesh.position.set(p.X, p.Y, p.Z);
 
-    const normal = circleMesh.position.clone().normalize();
-    circleMesh.lookAt(normal.add(circleMesh.position));
-    
-    // Determine if the point is at the edge of the band
-    if (Math.abs(p.Y) > 0.9) {  // Assuming the band is centered at Y=0
-      // If it's an edge point, use the edge material and geometry
-      circleMesh.material = edgeMaterial;
-      circleMesh.geometry = edgeGeometry;
-    }
-    
-    scene.add(circleMesh);
-  });
+  const normal = circleMesh.position.clone().normalize();
+  circleMesh.lookAt(normal.add(circleMesh.position));
+
+  // Determine if the point is at the edge of the band
+  if (index < points.length * 2 / 3) {
+    // If it's an edge point, use the edge material and geometry
+    circleMesh.material = edgeMaterial;
+    circleMesh.geometry = edgeGeometry;
+  }
+
+  scene.add(circleMesh);
+});
+
 
   const bandGeometry = new THREE.SphereGeometry(1, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
   const bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
   bandMesh.rotation.x = Math.PI / 2;
   scene.add(bandMesh);
 
-  const circleMaterial = new THREE.MeshBasicMaterial({ color: 0x5099d1, side: THREE.DoubleSide });
   const circleGeometry = new THREE.CircleGeometry(0.05, 32);
 
   points.forEach((p, index) => {
