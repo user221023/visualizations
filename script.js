@@ -1,14 +1,5 @@
 import * as THREE from './three.module.js';
 import { OrbitControls } from './OrbitControls.js';
-import { UnrealBloomPass } from './UnrealBloomPass.js';
-import { EffectComposer } from './EffectComposer.js';
-import { RenderPass } from './RenderPass.js';
-
-const params = {
-  bloomThreshold: 0.9,
-  bloomStrength: 1.5,
-  bloomRadius: 0.4
-};
 
 async function fetchData() {
   let points;
