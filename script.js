@@ -27,6 +27,8 @@ async function fetchData() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
     var mainColor = 0x48DCF6
+    var lightColor = 0x50FFFB
+
 
     // Position the camera to see the lit side
     camera.position.set(2, 2, 2);  // Adjust x, y, z values as needed
@@ -37,11 +39,11 @@ async function fetchData() {
     controls.update();
 
     // Add Ambient Light
-    var ambientLight = new THREE.AmbientLight(0xb5f1fb);
+    var ambientLight = new THREE.AmbientLight(lightColor);
     scene.add(ambientLight);
 
     // Add Directional Light
-    var directionalLight = new THREE.DirectionalLight(0xb5f1fb, 0.1);
+    var directionalLight = new THREE.DirectionalLight(lightColor, 0.1);
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
@@ -49,7 +51,7 @@ async function fetchData() {
         color: mainColor,
         transparent: true,
         opacity: 0.667,
-        emissive: 0xb5f1fb,
+        emissive: lightColor,
         emissiveIntensity: 1.0  // Adjust as needed
     });
 
@@ -70,7 +72,7 @@ async function fetchData() {
         transparent: true,
         opacity: 0.667,
         side: THREE.DoubleSide,
-        emissive: mainColor,
+        emissive: lightColor,
         emissiveIntensity: 1.0  // Adjust as needed
     });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
