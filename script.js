@@ -68,6 +68,7 @@ var pointsMaterial = new THREE.PointsMaterial({
     sizeAttenuation: true
   
 });
+  
 // Create and Add Points to the Scene
 var pointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
 scene.add(pointsMesh);
