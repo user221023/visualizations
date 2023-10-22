@@ -37,25 +37,23 @@ function init(points) {
   directionalLight.position.set(1, 1, 1).normalize();
   scene.add(directionalLight);
 
-  // Material for edge points
-  const edgeMaterial = new THREE.ShaderMaterial({
-    vertexShader: `
-      varying vec2 vUv;
-      void main() {
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-fragmentShader: `
-  void main() {
-    vec2 coords = 2.0 * gl_FragCoord.xy / vec2(gl_FragCoord.z) - 1.0;
-    float dist = length(coords);
-    if (dist > 1.0 || coords.y < 0.0) discard;
-    gl_FragColor = vec4(0.3176, 0.8627, 0.9608, 1.0); // Light blue color
-  }
-`
-    side: THREE.DoubleSide,
-  });
+// Material for edge points
+const edgeMaterial = new THREE.ShaderMaterial({
+  vertexShader: `
+    void main() {
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: `
+    void main() {
+      vec2 coords = 2.0 * gl_FragCoord.xy / vec2(gl_FragCoord.z) - 1.0;
+      float dist = length(coords);
+      if (dist > 1.0 || coords.y < 0.0) discard;
+      gl_FragColor = vec4(0.3176, 0.8627, 0.9608, 1.0);
+    }
+  `,
+  side: THREE.DoubleSide,
+});
 
   // Geometry for edge points
   const edgeGeometry = new THREE.CircleGeometry(0.05, 32);
