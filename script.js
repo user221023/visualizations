@@ -55,46 +55,21 @@ async function fetchData() {
     var bandRadius = 1;
     var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
 
-    // Band Shader Material
-    var bandMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-            color: { value: new THREE.Color(mediumColor) },
-            glowColor: { value: new THREE.Color(lightColor) },
-            pointPositions: { value: flatPointsArray },
-            pointSize: { value: 0.05 }, // Adjust as needed
-            opacity: { value: 0.8 }
-        },
-        vertexShader: `
-            varying vec3 vNormal;
-            void main() {
-                vNormal = normalize(normalMatrix * normal);
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-        `,
-        fragmentShader: `
-            uniform vec3 color;
-            uniform vec3 glowColor;
-            uniform vec3 pointPositions[${points.length}];
-            uniform float pointSize;
-            uniform float opacity;
-            varying vec3 vNormal;
-            void main() {
-                vec3 finalColor = color;
-                vec3 norm = normalize(vNormal);
-                for (int i = 0; i < ${points.length}; i++) {
-                    vec3 point = pointPositions[i];
-                    float dist = length(point - position);
-                    if (dist < pointSize) {
-                        float glow = 1.0 - dist / pointSize;
-                        finalColor += glowColor * glow;
-                    }
-                }
-                gl_FragColor = vec4(finalColor, opacity);
-            }
-        `,
-        side: THREE.DoubleSide,
-        transparent: true
-    });
+ vertexShader: `
+    varying vec3 vNormal;
+    void main() {
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+`,
+fragmentShader: `
+    uniform vec3 color;
+    varying vec3 vNormal;
+    void main() {
+        vec3 norm = normalize(vNormal);
+        gl_FragColor = vec4(norm * 0.5 + 0.5, 1.0); // simple normal visualization
+    }
+`,
 
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
     bandMesh.rotation.x = Math.PI / 2;
