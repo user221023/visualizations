@@ -2,18 +2,24 @@ import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.m
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/controls/OrbitControls.js';
 
 async function fetchData() {
-    try {
-        // Fetch data from JSON file hosted in Gist
-        const response = await fetch('https://gist.githubusercontent.com/user221023/644135557782c9f4bcbf26365644ce95/raw/fdc9fc054d27762653d366449d065718825d731f/data.json');
-        
-        // Check if the request was successful
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
+  let points;
+  try {
+    // Fetch data from JSON file hosted in Gist
+    const response = await fetch('https://gist.githubusercontent.com/user221023/644135557782c9f4bcbf26365644ce95/raw/fdc9fc054d27762653d366449d065718825d731f/data.json');
+    
+    // Check if the request was successful
+    if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+    }
 
-        // Parse the JSON data
-        const points = await response.json();
+    // Parse the JSON data
+    points = await response.json();
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    return;
+  }
 
+  // The rest of your code...
     // Initialize the scene, camera, and renderer
     var scene = new THREE.Scene();
     scene.background = new THREE.Color(0x000000);
@@ -69,10 +75,4 @@ async function fetchData() {
     }
     animate();
 }
-
 fetchData();
-    
-    } catch (error) {
-        console.error('Error fetching data: ', error);
-    }
-}
