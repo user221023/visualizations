@@ -120,5 +120,4 @@ function createGlow(point) {
   scene.add(glow);
 }
 
-
 fetchData();
