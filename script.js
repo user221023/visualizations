@@ -43,7 +43,7 @@ async function fetchData() {
     scene.add(ambientLight);
 
     // Add Directional Light
-    var directionalLight = new THREE.DirectionalLight(lightColor, 0.333);
+    var directionalLight = new THREE.DirectionalLight(lightColor, 0.667);
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
@@ -80,7 +80,7 @@ async function fetchData() {
     scene.add(bandMesh);
 
     // Position the camera closer
-    camera.position.z = 2;
+    camera.position.z = 1.5;
 
     // Render the scene
     function animate() {
