@@ -51,7 +51,6 @@ async function fetchData() {
             bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
             scene.add(bandMesh);
 
-
 // Create Buffer Geometry for Points
 var pointsGeometry = new THREE.BufferGeometry();
 var positions = [];
@@ -65,7 +64,7 @@ pointsGeometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
 
 var pointsMaterial = new THREE.ShaderMaterial({
     uniforms: {
-        color: { value: new THREE.Color(lightColor) },
+        color: { value: new THREE.Color(darkColor) },
     },
     vertexShader: `
         attribute float size;
@@ -92,6 +91,7 @@ var pointsMaterial = new THREE.ShaderMaterial({
 // Create and Add Points to the Scene
 var pointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
 scene.add(pointsMesh);
+
 
             // Render the scene
             function animate() {
