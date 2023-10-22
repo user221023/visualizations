@@ -21,7 +21,7 @@ async function fetchData() {
 
     // Initialize the scene, camera, and renderer
     var scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xebc1e6);
+    scene.background = new THREE.Color(0x192327);
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
