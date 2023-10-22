@@ -26,9 +26,10 @@ async function fetchData() {
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    var mainColor = 0x5099D1
-    var lightColor = 0xcafffd
-
+    var darkColor = 0x5099d1
+    var mediumColor = 0x48dcf6
+    var lightColor = 0x50fffb
+    var lightingColor = 0xb9fffd
 
     // Position the camera to see the lit side
     camera.position.set(2, 2, 2);  // Adjust x, y, z values as needed
@@ -39,19 +40,19 @@ async function fetchData() {
     controls.update();
 
     // Add Ambient Light
-    var ambientLight = new THREE.AmbientLight(lightColor);
+    var ambientLight = new THREE.AmbientLight(lightingColor);
     scene.add(ambientLight);
 
     // Add Directional Light
-    var directionalLight = new THREE.DirectionalLight(lightColor, 0.9);
+    var directionalLight = new THREE.DirectionalLight(lightingColor, 1.0);
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
     var sphereMaterial = new THREE.MeshPhysicalMaterial({
-        color: mainColor,
+        color: darkColor,
         transparent: true,
         opacity: 0.667,
-        emissive: lightColor,
+        emissive: mediumColor,
         emissiveIntensity: 0.667  // Adjust as needed
     });
 
@@ -68,11 +69,11 @@ async function fetchData() {
     var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
     var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
     var bandMaterial = new THREE.MeshPhysicalMaterial({
-        color: mainColor,
+        color: darkColor,
         transparent: true,
         opacity: 0.667,
         side: THREE.DoubleSide,
-        emissive: mainColor,
+        emissive: darkColor,
         emissiveIntensity: 0.333  // Adjust as needed
     });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
@@ -80,7 +81,7 @@ async function fetchData() {
     scene.add(bandMesh);
 
     // Position the camera closer
-    camera.position.z = 1.5;
+    camera.position.z = 1.2;
 
     // Render the scene
     function animate() {
