@@ -23,113 +23,60 @@ async function fetchData() {
     return;
   }
 
-  // Initialize the scene, camera, and renderer
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x192327);
-  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+            // Initialize the scene, camera, and renderer
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            var renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
 
-  const darkColor = new THREE.Color(0x5099d1);
-  const mediumColor = new THREE.Color(0x48dcf6);
-  const lightColor = new THREE.Color(0x50fffb);
-  const lightingColor = new THREE.Color(0xebc1e6);
+            // Position the camera to see the lit side
+            camera.position.set(2, 2, 2);  // Adjust x, y, z values as needed
+            camera.lookAt(new THREE.Vector3(0, 0, 0));  // Looking at the origin, adjust as needed
 
-  // Initialize OrbitControls
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.update();
+            // Initialize OrbitControls
+            var controls = new OrbitControls(camera, renderer.domElement);
+            controls.update();
 
-  // Add Ambient Light
-  const ambientLight = new THREE.AmbientLight(lightingColor);
-  scene.add(ambientLight);
+            // Add Ambient Light
+            var ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
 
-  // Add Directional Light
-  const directionalLight = new THREE.DirectionalLight(lightingColor, 1.0);
-  directionalLight.position.set(1, 1, 1).normalize();
-  scene.add(directionalLight);
+            // Add Directional Light
+            var directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+            directionalLight.position.set(1, 1, 1).normalize();
+            scene.add(directionalLight);
 
-  const pointMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      color1: { value: darkColor },
-      color2: { value: lightColor },
-      size: { value: 20.0 },
-      scale: { value: window.innerHeight / 2 }
-    },
-    vertexShader: `
-      uniform vec3 color1;
-      uniform vec3 color2;
-      uniform float size;
-      uniform float scale;
-      varying vec3 vColor;
-      void main() {
-        vColor = mix(color1, color2, position.z);
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (scale / -mvPosition.z);
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vColor;
-      void main() {
-        float r = distance(gl_PointCoord, vec2(0.5, 0.5));
-        float delta = fwidth(r);
-        float alpha = 1.0 - smoothstep(0.5 - delta, 0.5 + delta, r);
-        if (r > 0.5) {
-          discard;
-        }
-        gl_FragColor = vec4(vColor, alpha);
-      }
-    `,
-    blending: THREE.AdditiveBlending,
-    depthTest: false,
-    transparent: true
-  });
+            // Create a material for the spheres
+            var sphereMaterial = new THREE.MeshPhysicalMaterial({ color: 0x64B5F6, transparent: true, opacity: 1 });
 
-  // Create points and add them to the scene
-  const pointsGeometry = new THREE.BufferGeometry().setFromPoints(points.map(p => new THREE.Vector3(p.X, p.Y, p.Z)));
-  const pointsMesh = new THREE.Points(pointsGeometry, pointMaterial);
-  scene.add(pointsMesh);
+            // Create spheres and add them to the scene
+            for (var i = 0; i < points.length; i++) {
+                var geometry = new THREE.SphereGeometry(0.02);  // Radius of 0.02
+                var sphere = new THREE.Mesh(geometry, sphereMaterial);
+                sphere.position.set(points[i].X, points[i].Y, points[i].Z);
+                scene.add(sphere);
+            }
 
-  // Create the spherical band
-  const bandRadius = 1;
-  const bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
-  const bandMaterial = new THREE.MeshPhysicalMaterial({
-    color: darkColor,
-    transparent: true,
-    opacity: 0.8,
-    side: THREE.DoubleSide,
-    emissive: darkColor,
-    emissiveIntensity: 0.0
-  });
-  const bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
-  bandMesh.rotation.x = Math.PI / 2;
-  scene.add(bandMesh);
+            // Create the spherical band
+            var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
+            var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
+            var bandMaterial = new THREE.MeshPhysicalMaterial({ color: 0x64B5F6, transparent: true, opacity: 0.75, side: THREE.DoubleSide, emissive: 0x64B5F6, emissiveIntensity: 0.1 });
+            var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
+            bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
+            scene.add(bandMesh);
 
-  // Position the camera closer
-  camera.position.z = 1.2;
+            // Position the camera closer
+            camera.position.z = 2;
 
-  // Setup Post-Processing: Setup UnrealBloomPass here
-  const renderScene = new RenderPass(scene, camera);
-  const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-  bloomPass.threshold = params.bloomThreshold;
-  bloomPass.strength = params.bloomStrength;
-  bloomPass.radius = params.bloomRadius;
-
-  const composer = new EffectComposer(renderer);
-  composer.addPass(renderScene);
-  composer.addPass(bloomPass);
-
-  // Render the scene
-  function animate() {
-    requestAnimationFrame(animate);
-    bloomPass.threshold = params.bloomThreshold;
-    bloomPass.strength = params.bloomStrength;
-    bloomPass.radius = params.bloomRadius;
-    controls.update();
-    composer.render();
-  }
-  animate();
+            // Render the scene
+            function animate() {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
 }
 
 fetchData();
