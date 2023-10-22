@@ -55,21 +55,32 @@ async function fetchData() {
     var bandRadius = 1;
     var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
 
- vertexShader: `
-    varying vec3 vNormal;
+const pointsMaterial = new THREE.ShaderMaterial({
+  uniforms: {
+    color: { value: new THREE.Color(darkColor) },
+  },
+  vertexShader: `
+    attribute float size;
     void main() {
-        vNormal = normalize(normalMatrix * normal);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      gl_PointSize = size * (300.0 / -mvPosition.z);
+      gl_Position = projectionMatrix * mvPosition;
     }
-`,
-fragmentShader: `
+  `,
+  fragmentShader: `
     uniform vec3 color;
-    varying vec3 vNormal;
     void main() {
-        vec3 norm = normalize(vNormal);
-        gl_FragColor = vec4(norm * 0.5 + 0.5, 1.0); // simple normal visualization
+      vec2 coords = 2.0 * gl_PointCoord - 1.0; // Transform to [-1, 1] range
+      float dist = dot(coords, coords);
+      float alpha = 1.0 - smoothstep(0.8, 1.0, dist);
+      gl_FragColor = vec4(color, alpha);
     }
-`,
+  `,
+  blending: THREE.AdditiveBlending,
+  depthTest: false,
+  transparent: true
+});
+
 
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
     bandMesh.rotation.x = Math.PI / 2;
