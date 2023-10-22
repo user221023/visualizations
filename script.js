@@ -1,10 +1,18 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/controls/OrbitControls.js';
 
-async function init() {
-    // Fetch data from JSON file
-    const response = await fetch('data.json');
-    const points = await response.json();
+async function fetchData() {
+    try {
+        // Fetch data from JSON file hosted in Gist
+        const response = await fetch('https://gist.githubusercontent.com/user221023/644135557782c9f4bcbf26365644ce95/raw/fdc9fc054d27762653d366449d065718825d731f/data.json');
+        
+        // Check if the request was successful
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+
+        // Parse the JSON data
+        const points = await response.json();
 
     // Initialize the scene, camera, and renderer
     var scene = new THREE.Scene();
@@ -62,4 +70,9 @@ async function init() {
     animate();
 }
 
-init();
+fetchData();
+    
+    } catch (error) {
+        console.error('Error fetching data: ', error);
+    }
+}
