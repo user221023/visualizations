@@ -40,13 +40,19 @@ async function fetchData() {
     scene.add(ambientLight);
 
     // Add Directional Light
-    var directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+    var directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.1);
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
-    // Create a material for the spheres
-    var sphereMaterial = new THREE.MeshPhysicalMaterial({ color: 0x64B5F6, transparent: true, opacity: 1 });
+    var sphereMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0x64B5F6,
+        transparent: true,
+        opacity: 1,
+        emissive: 0x64B5F6,
+        emissiveIntensity: 0.5  // Adjust as needed
+    });
 
+  
     // Create spheres and add them to the scene
     for (var i = 0; i < points.length; i++) {
         var geometry = new THREE.SphereGeometry(0.02);  // Radius of 0.02
@@ -58,7 +64,14 @@ async function fetchData() {
     // Create the spherical band
     var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
     var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
-    var bandMaterial = new THREE.MeshPhysicalMaterial({ color: 0x64B5F6, transparent: true, opacity: 0.75, side: THREE.DoubleSide, emissive: 0x64B5F6, emissiveIntensity: 0.1 });
+    var bandMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0x64B5F6,
+        transparent: true,
+        opacity: 0.75,
+        side: THREE.DoubleSide,
+        emissive: 0x64B5F6,
+        emissiveIntensity: 0.5  // Adjust as needed
+    });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
     bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
     scene.add(bandMesh);
