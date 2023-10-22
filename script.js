@@ -1,7 +1,3 @@
-I'm new to coding and working on a visualization in Three.js.
-
-Help me convert the points from spheres to flat glowing sections on the spheroidal band.
-
 import * as THREE from './three.module.js';
 import { OrbitControls } from './OrbitControls.js';
 
@@ -47,6 +43,14 @@ async function fetchData() {
             directionalLight.position.set(1, 1, 1).normalize();
             scene.add(directionalLight);
 
+            // Create the spherical band
+            var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
+            var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
+            var bandMaterial = new THREE.MeshPhysicalMaterial({ color: darkColor, transparent: true, opacity: 0.8, side: THREE.DoubleSide, emissive: lightColor, emissiveIntensity: 0.2 });
+            var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
+            bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
+            scene.add(bandMesh);
+
             // Create a material for the spheres
             var sphereMaterial = new THREE.MeshPhysicalMaterial({ color: mediumColor, transparent: true, opacity: 0.8 });
 
@@ -57,15 +61,7 @@ async function fetchData() {
                 sphere.position.set(points[i].X, points[i].Y, points[i].Z);
                 scene.add(sphere);
             }
-
-            // Create the spherical band
-            var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
-            var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
-            var bandMaterial = new THREE.MeshPhysicalMaterial({ color: darkColor, transparent: true, opacity: 0.8, side: THREE.DoubleSide, emissive: lightColor, emissiveIntensity: 0.2 });
-            var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
-            bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
-            scene.add(bandMesh);
-
+  
             // Position the camera closer
             camera.position.z = 0.7;
 
