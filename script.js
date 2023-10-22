@@ -107,14 +107,16 @@ function createGlow(point) {
   const glowMaterial = new THREE.SpriteMaterial({
     map: new THREE.CanvasTexture(generateSprite(color)),
     blending: THREE.AdditiveBlending,
-    color: 0xffffff, // white color to ensure the glow color is not altered
+    color: 0xffffff,
     transparent: true,
     opacity: 0.5,
-    sizeAttenuation: false
+    sizeAttenuation: false,
+    depthWrite: false
   });
   const glow = new THREE.Sprite(glowMaterial);
   glow.scale.set(0.2, 0.2, 1);
   glow.position.set(point.X, point.Y, point.Z);
+  glow.renderOrder = 1;
   scene.add(glow);
 }
 
