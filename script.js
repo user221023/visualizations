@@ -70,22 +70,23 @@ const pointsMaterial = new THREE.ShaderMaterial({
     color: { value: new THREE.Color(darkColor) },
   },
 vertexShader: `
-  attribute float size;
-  void main() {
-    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_PointSize = 25.0;
-    gl_Position = projectionMatrix * mvPosition;
-  }
+attribute float size;
+void main() {
+  vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+  gl_PointSize = 25;
+  gl_Position = projectionMatrix * mvPosition;
+}
 `,
 
 fragmentShader: `
-  uniform vec3 color;
-  void main() {
-    vec2 coords = 2.0 * gl_PointCoord - 1.0; // Transform to [-1, 1] range
-    float dist = dot(coords, coords);
-    if (dist > 1.0) discard; // Discard fragments outside the unit circle
-    gl_FragColor = vec4(color, 1.0); // Set alpha to 1.0 for a solid disc
-  }
+uniform vec3 color;
+void main() {
+  vec2 coords = 2.0 * gl_PointCoord - 1.0; // Transform to [-1, 1] range
+  float dist = dot(coords, coords);
+  if (dist > 1.0) discard; // Discard fragments outside of unit circle
+  gl_FragColor = vec4(color, 1.0);
+}
+
 `,
 
 depthTest: false,
