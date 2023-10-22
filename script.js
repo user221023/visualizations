@@ -48,22 +48,39 @@ async function fetchData() {
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
-    var sphereMaterial = new THREE.MeshPhysicalMaterial({
-        color: darkColor,
-        transparent: true,
-        opacity: 0.8,
-        emissive: mediumColor,
-        emissiveIntensity: 0.2  // Adjust as needed
+    // Material for the points
+    var pointMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+            color1: { value: new THREE.Color(darkColor) },
+            color2: { value: new THREE.Color(lightColor) },
+            size: { value: 5.0 }
+        },
+        vertexShader: `
+            varying vec3 vColor;
+            void main() {
+                vColor = mix(color1, color2, position.z);
+                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                gl_PointSize = size * (200.0 / -mvPosition.z);
+                gl_Position = projectionMatrix * mvPosition;
+            }
+        `,
+        fragmentShader: `
+            uniform vec3 color1;
+            uniform vec3 color2;
+            varying vec3 vColor;
+            void main() {
+                gl_FragColor = vec4(vColor, 1.0);
+            }
+        `,
+        blending: THREE.AdditiveBlending,
+        depthTest: false,
+        transparent: true
     });
 
-  
-    // Create spheres and add them to the scene
-    for (var i = 0; i < points.length; i++) {
-        var geometry = new THREE.SphereGeometry(0.01);  // Radius of 0.01
-        var sphere = new THREE.Mesh(geometry, sphereMaterial);
-        sphere.position.set(points[i].X, points[i].Y, points[i].Z);
-        scene.add(sphere);
-    }
+    // Create points and add them to the scene
+    var pointsGeometry = new THREE.BufferGeometry().setFromPoints(points.map(p => new THREE.Vector3(p.X, p.Y, p.Z)));
+    var pointsMesh = new THREE.Points(pointsGeometry, pointMaterial);
+    scene.add(pointsMesh);
 
     // Create the spherical band
     var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
