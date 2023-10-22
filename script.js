@@ -29,7 +29,7 @@ async function fetchData() {
     camera.lookAt(new THREE.Vector3(0, 0, 0));  // Looking at the origin, adjust as needed
 
     // Initialize OrbitControls
-    var controls = new OrbitControls(camera, renderer.domElement);
+    var controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.update();
 
     // Add Ambient Light
