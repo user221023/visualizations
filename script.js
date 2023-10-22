@@ -43,6 +43,14 @@ async function fetchData() {
             directionalLight.position.set(1, 1, 1).normalize();
             scene.add(directionalLight);
 
+              // Create the spherical band
+            var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
+            var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
+            var bandMaterial = new THREE.MeshPhysicalMaterial({ color: darkColor, transparent: true, opacity: 0.8, side: THREE.DoubleSide, emissive: lightColor, emissiveIntensity: 0.2 });
+            var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
+            bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
+            scene.add(bandMesh);
+
             // Create points
   for (var i = 0; i < points.length; i++) {
     var diskGeometry = new THREE.CircleGeometry(0.05, 32); // Radius of 0.05 and 32 segments
@@ -53,13 +61,49 @@ async function fetchData() {
     scene.add(disk);
 }
 
-            // Create the spherical band
-            var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
-            var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
-            var bandMaterial = new THREE.MeshPhysicalMaterial({ color: darkColor, transparent: true, opacity: 0.8, side: THREE.DoubleSide, emissive: lightColor, emissiveIntensity: 0.2 });
-            var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
-            bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
-            scene.add(bandMesh);
+  function createGlowMaterial(color, size) {
+    var glowMaterial = new THREE.SpriteMaterial({
+        map: new THREE.CanvasTexture(generateSprite(color)),
+        blending: THREE.AdditiveBlending,
+        color: color,
+        transparent: true,
+        opacity: 0.5,
+        sizeAttenuation: false
+    });
+    return glowMaterial;
+}
+
+function generateSprite(color) {
+    var canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    var context = canvas.getContext('2d');
+    var gradient = context.createRadialGradient(
+        canvas.width / 2,
+        canvas.height / 2,
+        0,
+        canvas.width / 2,
+        canvas.height / 2,
+        canvas.width / 2
+    );
+    gradient.addColorStop(0, 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',1)');
+    gradient.addColorStop(0.2, 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',1)');
+    gradient.addColorStop(0.4, 'rgba(' + color.r + ',' + color.g + ',' + color.b + ',.6)');
+    gradient.addColorStop(1, 'rgba(0,0,0,0)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    return canvas;
+}
+  
+for (var i = 0; i < points.length; i++) {
+    // ... (previous code to create disks)
+
+    var glowMaterial = createGlowMaterial(new THREE.Color(mediumColor), 0.1);
+    var glow = new THREE.Sprite(glowMaterial);
+    glow.scale.set(0.2, 0.2, 1); // Adjust the size as needed
+    glow.position.copy(disk.position);
+    scene.add(glow);
+}
 
             // Position the camera closer
             camera.position.z = 0.7;
