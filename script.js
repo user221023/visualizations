@@ -48,34 +48,42 @@ async function fetchData() {
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
-    // Material for the points
-    var pointMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-            color1: { value: new THREE.Color(darkColor) },
-            color2: { value: new THREE.Color(lightColor) },
-            size: { value: 5.0 }
-        },
-        vertexShader: `
-            varying vec3 vColor;
-            void main() {
-                vColor = mix(color1, color2, position.z);
-                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                gl_PointSize = size * (200.0 / -mvPosition.z);
-                gl_Position = projectionMatrix * mvPosition;
+var pointMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+        color1: { value: new THREE.Color(darkColor) },
+        color2: { value: new THREE.Color(lightColor) },
+        size: { value: 20.0 },  // Adjust size as needed
+        scale: { value: window.innerHeight / 2 }  // Required for proper sizing
+    },
+    vertexShader: `
+        uniform float size;
+        uniform float scale;
+        varying vec3 vColor;
+        void main() {
+            vColor = mix(color1, color2, position.z);
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (scale / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+        }
+    `,
+    fragmentShader: `
+        uniform vec3 color1;
+        uniform vec3 color2;
+        varying vec3 vColor;
+        void main() {
+            float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+            float delta = fwidth(r);
+            float alpha = 1.0 - smoothstep(0.5 - delta, 0.5 + delta, r);
+            if (r > 0.5) {  // If the point is out of the circular region
+                discard;
             }
-        `,
-        fragmentShader: `
-            uniform vec3 color1;
-            uniform vec3 color2;
-            varying vec3 vColor;
-            void main() {
-                gl_FragColor = vec4(vColor, 1.0);
-            }
-        `,
-        blending: THREE.AdditiveBlending,
-        depthTest: false,
-        transparent: true
-    });
+            gl_FragColor = vec4(vColor, alpha);
+        }
+    `,
+    blending: THREE.AdditiveBlending,
+    depthTest: false,
+    transparent: true
+});
 
     // Create points and add them to the scene
     var pointsGeometry = new THREE.BufferGeometry().setFromPoints(points.map(p => new THREE.Vector3(p.X, p.Y, p.Z)));
