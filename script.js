@@ -46,7 +46,7 @@ async function fetchData() {
               // Create the spherical band
             var bandRadius = 1;  // Assuming the points lie on a sphere of radius 1
             var bandGeometry = new THREE.SphereGeometry(bandRadius, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
-            var bandMaterial = new THREE.MeshPhysicalMaterial({ color: darkColor, transparent: true, opacity: 0.8, side: THREE.DoubleSide, emissive: lightColor, emissiveIntensity: 0.2 });
+            var bandMaterial = new THREE.MeshPhysicalMaterial({ color: mediumColor, transparent: true, opacity: 0.8, side: THREE.DoubleSide, emissive: lightColor, emissiveIntensity: 0.2 });
             var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
             bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
             scene.add(bandMesh);
@@ -65,7 +65,7 @@ async function fetchData() {
     var glowMaterial = new THREE.SpriteMaterial({
         map: new THREE.CanvasTexture(generateSprite(color)),
         blending: THREE.AdditiveBlending,
-        color: color,
+        color: lightColor,
         transparent: true,
         opacity: 0.5,
         sizeAttenuation: false
