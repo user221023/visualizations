@@ -49,7 +49,7 @@ async function fetchData() {
         color: mainColor,
         transparent: true,
         opacity: 0.667,
-        emissive: mainColor,
+        emissive: 0xb5f1fb,
         emissiveIntensity: 1.0  // Adjust as needed
     });
 
