@@ -65,21 +65,19 @@ var pointsMaterial = new THREE.ShaderMaterial({
     },
     vertexShader: `
         attribute float size;
-        varying vec3 vColor;
         void main() {
-            vColor = color;
             vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
             gl_PointSize = size * (300.0 / -mvPosition.z);
             gl_Position = projectionMatrix * mvPosition;
         }
     `,
     fragmentShader: `
-        varying vec3 vColor;
+        uniform vec3 color;
         void main() {
             vec2 coords = 2.0 * gl_PointCoord - 1.0; // Transform to [-1, 1] range
             float dist = dot(coords, coords);
             float alpha = 1.0 - smoothstep(0.8, 1.0, dist);
-            gl_FragColor = vec4(vColor, alpha);
+            gl_FragColor = vec4(color, alpha);
         }
     `,
     blending: THREE.AdditiveBlending,
@@ -92,17 +90,17 @@ for (var i = 0; i < points.length; i++) {
     positions.push(points[i].X, points[i].Y, points[i].Z);
     sizes.push(5.0); // Adjust size as needed
 }
+
 pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
 pointsGeometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
 
   
 // Create and Add Points to the Scene
 var pointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
 scene.add(pointsMesh);
 
-  
-            // Position the camera closer
-            camera.position.z = 0.7;
+
 
             // Render the scene
             function animate() {
