@@ -97,6 +97,21 @@ fragmentShader: `
     bandMesh.rotation.x = Math.PI / 2;
     scene.add(bandMesh);
 
+// Convert Points to a flat array
+var flatPointsArray = [];
+var sizes = [];
+points.forEach(p => {
+    flatPointsArray.push(p.X, p.Y, p.Z);
+    sizes.push(5.0); // Adjust size as needed
+});
+
+var pointsGeometry = new THREE.BufferGeometry();
+pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(flatPointsArray, 3));
+pointsGeometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+
+var pointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
+scene.add(pointsMesh);
+
     // Render the scene
     function animate() {
         requestAnimationFrame(animate);
