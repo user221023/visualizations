@@ -73,7 +73,7 @@ vertexShader: `
 attribute float size;
 void main() {
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-  gl_PointSize = 20.0;
+  gl_PointSize = size * (300.0 / -mvPosition.z); // You can adjust the size multiplier here as needed
   gl_Position = projectionMatrix * mvPosition;
 }
 `,
