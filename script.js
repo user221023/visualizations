@@ -26,7 +26,7 @@ async function fetchData() {
     var renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    var mainColor = 48DCF6
+    var mainColor = 0x48DCF6
 
     // Position the camera to see the lit side
     camera.position.set(2, 2, 2);  // Adjust x, y, z values as needed
