@@ -1,8 +1,8 @@
-import * as THREE from './js/three.module.js';
-import { OrbitControls } from './js/OrbitControls.js';
-import { UnrealBloomPass } from './js/UnrealBloomPass.js';
-import { EffectComposer } from './js/EffectComposer.js';
-import { RenderPass } from './js/RenderPass.js';
+import * as THREE from './three.module.js';
+import { OrbitControls } from './OrbitControls.js';
+import { UnrealBloomPass } from './UnrealBloomPass.js';
+import { EffectComposer } from './EffectComposer.js';
+import { RenderPass } from './RenderPass.js';
 
 const params = {
   bloomThreshold: 0.9,
