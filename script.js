@@ -51,16 +51,27 @@ async function fetchData() {
             bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
             scene.add(bandMesh);
 
-            // Create a material for the spheres
-            var sphereMaterial = new THREE.MeshPhysicalMaterial({ color: mediumColor, transparent: true, opacity: 0.8 });
+  // Create Buffer Geometry for Points
+var pointsGeometry = new THREE.BufferGeometry();
+var positions = [];
+for (var i = 0; i < points.length; i++) {
+    positions.push(points[i].X, points[i].Y, points[i].Z);
+}
+pointsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
 
-            // Create spheres and add them to the scene
-            for (var i = 0; i < points.length; i++) {
-                var geometry = new THREE.SphereGeometry(0.02);  // Radius of 0.02
-                var sphere = new THREE.Mesh(geometry, sphereMaterial);
-                sphere.position.set(points[i].X, points[i].Y, points[i].Z);
-                scene.add(sphere);
-            }
+  // Create Material for Points
+var pointsMaterial = new THREE.PointsMaterial({
+    color: lightColor,
+    size: 0.05,
+    transparent: true,
+    opacity: 0.8,
+    sizeAttenuation: true
+  
+});
+// Create and Add Points to the Scene
+var pointsMesh = new THREE.Points(pointsGeometry, pointsMaterial);
+scene.add(pointsMesh);
+
   
             // Position the camera closer
             camera.position.z = 0.7;
