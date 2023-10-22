@@ -55,7 +55,7 @@ async function fetchData() {
   
     // Create spheres and add them to the scene
     for (var i = 0; i < points.length; i++) {
-        var geometry = new THREE.SphereGeometry(0.02);  // Radius of 0.02
+        var geometry = new THREE.SphereGeometry(0.01);  // Radius of 0.01
         var sphere = new THREE.Mesh(geometry, sphereMaterial);
         sphere.position.set(points[i].X, points[i].Y, points[i].Z);
         scene.add(sphere);
