@@ -80,43 +80,43 @@ async function fetchData() {
     scene.add(disk);
   }
 
-  function createGlow(point) {
-    const glowMaterial = new THREE.SpriteMaterial({
-      map: new THREE.CanvasTexture(generateSprite(new THREE.Color(lightColor))),
-      blending: THREE.AdditiveBlending,
-      color: lightColor,
-      transparent: true,
-      opacity: 0.5,
-      sizeAttenuation: false
-    });
-    const glow = new THREE.Sprite(glowMaterial);
-    glow.scale.set(0.2, 0.2, 1);
-    glow.position.set(point.X, point.Y, point.Z);
-    scene.add(glow);
-  }
-
-  function generateSprite(color) {
-    const canvas = document.createElement('canvas');
-    canvas.width = 16;
-    canvas.height = 16;
-    const context = canvas.getContext('2d');
-    const gradient = context.createRadialGradient(
-      canvas.width / 2,
-      canvas.height / 2,
-      0,
-      canvas.width / 2,
-      canvas.height / 2,
-      canvas.width / 2
-    );
-    const colorStyle = `rgba(${color.r * 255},${color.g * 255},${color.b * 255},1)`;
-    gradient.addColorStop(0, colorStyle);
-    gradient.addColorStop(0.2, colorStyle);
-    gradient.addColorStop(0.4, colorStyle.replace('1)', '0.6)'));
-    gradient.addColorStop(1, 'rgba(0,0,0,0)');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-    return canvas;
-  }
+function generateSprite(color) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 128;
+  canvas.height = 128;
+  const context = canvas.getContext('2d');
+  const gradient = context.createRadialGradient(
+    canvas.width / 2,
+    canvas.height / 2,
+    0,
+    canvas.width / 2,
+    canvas.height / 2,
+    canvas.width / 2
+  );
+  gradient.addColorStop(0, `rgba(${color.r * 255},${color.g * 255},${color.b * 255},1)`);
+  gradient.addColorStop(0.2, `rgba(${color.r * 255},${color.g * 255},${color.b * 255},1)`);
+  gradient.addColorStop(0.4, `rgba(${color.r * 255},${color.g * 255},${color.b * 255},0.6)`);
+  gradient.addColorStop(1, 'rgba(0,0,0,0)');
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  return canvas;
 }
+
+function createGlow(point) {
+  const color = new THREE.Color(lightColor);
+  const glowMaterial = new THREE.SpriteMaterial({
+    map: new THREE.CanvasTexture(generateSprite(color)),
+    blending: THREE.AdditiveBlending,
+    color: 0xffffff, // white color to ensure the glow color is not altered
+    transparent: true,
+    opacity: 0.5,
+    sizeAttenuation: false
+  });
+  const glow = new THREE.Sprite(glowMaterial);
+  glow.scale.set(0.2, 0.2, 1);
+  glow.position.set(point.X, point.Y, point.Z);
+  scene.add(glow);
+}
+
 
 fetchData();
