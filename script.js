@@ -59,7 +59,7 @@ async function fetchData() {
             scene.add(bandMesh);
 
             // Position the camera closer
-            camera.position.z = 2;
+            camera.position.z = 1;
 
             // Render the scene
             function animate() {
