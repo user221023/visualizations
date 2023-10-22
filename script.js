@@ -67,10 +67,10 @@ async function fetchData() {
     var bandMaterial = new THREE.MeshPhysicalMaterial({
         color: 0x64B5F6,
         transparent: true,
-        opacity: 0.33,
+        opacity: 0.4,
         side: THREE.DoubleSide,
         emissive: 0x64B5F6,
-        emissiveIntensity: 0.67  // Adjust as needed
+        emissiveIntensity: 1.0  // Adjust as needed
     });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
     bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
