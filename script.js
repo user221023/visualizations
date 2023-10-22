@@ -67,21 +67,19 @@ var pointsMaterial = new THREE.ShaderMaterial({
         color: { value: new THREE.Color(darkColor) },
     },
     vertexShader: `
-        attribute float size;
-        void main() {
-            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            gl_PointSize = size * (300.0 / -mvPosition.z);
-            gl_Position = projectionMatrix * mvPosition;
-        }
+void main() {
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = size;
+    gl_Position = projectionMatrix * mvPosition;
+}
     `,
-    fragmentShader: `
-        uniform vec3 color;
-        void main() {
-            vec2 coords = 2.0 * gl_PointCoord - 1.0; // Transform to [-1, 1] range
-            float dist = dot(coords, coords);
-            float alpha = 1.0 - smoothstep(0.8, 1.0, dist);
-            gl_FragColor = vec4(color, alpha);
-        }
+void main() {
+    vec3 glowColor = color;
+    vec2 coords = 2.0 * gl_PointCoord - 1.0;
+    float dist = dot(coords, coords);
+    float alpha = 1.0 - smoothstep(0.0, 1.0, dist);
+    gl_FragColor = vec4(glowColor, alpha);
+}
     `,
     blending: THREE.AdditiveBlending,
     depthTest: false,
