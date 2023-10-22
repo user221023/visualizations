@@ -1,5 +1,5 @@
-import * as THREE from './three.module.js';
-import { OrbitControls } from './OrbitControls.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/js/controls/OrbitControls';
 
 async function fetchData() {
   try {
@@ -13,6 +13,7 @@ async function fetchData() {
     console.error('Error fetching data: ', error);
   }
 }
+
 
 function init(points) {
   const scene = new THREE.Scene();
@@ -36,32 +37,48 @@ function init(points) {
   directionalLight.position.set(1, 1, 1).normalize();
   scene.add(directionalLight);
 
-    // Material for edge points
+  // Material for edge points
   const edgeMaterial = new THREE.ShaderMaterial({
     vertexShader: `
+      varying vec2 vUv;
       void main() {
+        vUv = uv;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,
     fragmentShader: `
+      varying vec2 vUv;
       void main() {
-        vec2 coords = 2.0 * gl_FragCoord.xy / vec2(gl_FragCoord.z) - 1.0;
+        vec2 coords = vUv * 2.0 - 1.0;
         float dist = length(coords);
         if (dist > 1.0 || coords.y < 0.0) discard;
-        gl_FragColor = vec4(0.5099d1, 0.48dcf6, 0.50ffb, 1.0);
+        gl_FragColor = vec4(0.2, 0.86, 0.96, 1.0);
       }
     `,
     side: THREE.DoubleSide,
   });
 
   // Geometry for edge points
-  const edgeGeometry = new THREE.CircleGeometry(0.05, 32);const bandMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x48dcf6,
-    transparent: true,
-    opacity: 0.8,
-    side: THREE.DoubleSide,
-    emissive: 0x50ffb,
-    emissiveIntensity: 0.2
+  const edgeGeometry = new THREE.CircleGeometry(0.05, 32);
+
+  const circleMaterial = new THREE.MeshBasicMaterial({ color: 0x5099d1, side: THREE.DoubleSide });
+  const circleGeometry = new THREE.CircleGeometry(0.05, 32);
+
+  points.forEach((p, index) => {
+    const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
+    circleMesh.position.set(p.X, p.Y, p.Z);
+
+    const normal = circleMesh.position.clone().normalize();
+    circleMesh.lookAt(normal.add(circleMesh.position));
+    
+    // Determine if the point is at the edge of the band
+    if (Math.abs(p.Y) > 0.9) {  // Assuming the band is centered at Y=0
+      // If it's an edge point, use the edge material and geometry
+      circleMesh.material = edgeMaterial;
+      circleMesh.geometry = edgeGeometry;
+    }
+    
+    scene.add(circleMesh);
   });
 
   const bandGeometry = new THREE.SphereGeometry(1, 32, 32, 0, Math.PI * 2, Math.PI / 3, Math.PI / 3);
