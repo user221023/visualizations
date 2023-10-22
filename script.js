@@ -51,9 +51,9 @@ async function fetchData() {
     var sphereMaterial = new THREE.MeshPhysicalMaterial({
         color: darkColor,
         transparent: true,
-        opacity: 0.667,
+        opacity: 0.8,
         emissive: mediumColor,
-        emissiveIntensity: 0.667  // Adjust as needed
+        emissiveIntensity: 0.2  // Adjust as needed
     });
 
   
@@ -74,7 +74,7 @@ async function fetchData() {
         opacity: 0.8,
         side: THREE.DoubleSide,
         emissive: darkColor,
-        emissiveIntensity: 0.1  // Adjust as needed
+        emissiveIntensity: 0.0  // Adjust as needed
     });
     var bandMesh = new THREE.Mesh(bandGeometry, bandMaterial);
     bandMesh.rotation.x = Math.PI / 2;  // Rotate 90 degrees around the X-axis
