@@ -36,7 +36,26 @@ function init(points) {
   directionalLight.position.set(1, 1, 1).normalize();
   scene.add(directionalLight);
 
-  const bandMaterial = new THREE.MeshPhysicalMaterial({
+    // Material for edge points
+  const edgeMaterial = new THREE.ShaderMaterial({
+    vertexShader: `
+      void main() {
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      void main() {
+        vec2 coords = 2.0 * gl_FragCoord.xy / vec2(gl_FragCoord.z) - 1.0;
+        float dist = length(coords);
+        if (dist > 1.0 || coords.y < 0.0) discard;
+        gl_FragColor = vec4(0.5099d1, 0.48dcf6, 0.50ffb, 1.0);
+      }
+    `,
+    side: THREE.DoubleSide,
+  });
+
+  // Geometry for edge points
+  const edgeGeometry = new THREE.CircleGeometry(0.05, 32);const bandMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x48dcf6,
     transparent: true,
     opacity: 0.8,
@@ -53,12 +72,20 @@ function init(points) {
   const circleMaterial = new THREE.MeshBasicMaterial({ color: 0x5099d1, side: THREE.DoubleSide });
   const circleGeometry = new THREE.CircleGeometry(0.05, 32);
 
-  points.forEach(p => {
+  points.forEach((p, index) => {
     const circleMesh = new THREE.Mesh(circleGeometry, circleMaterial);
     circleMesh.position.set(p.X, p.Y, p.Z);
-    // Assuming the band is a sphere of radius 1, normalize the position to get the normal
+
     const normal = circleMesh.position.clone().normalize();
     circleMesh.lookAt(normal.add(circleMesh.position));
+    
+    // Determine if the point is at the edge of the band
+    if (index < points.length * 2 / 3) {
+      // If it's an edge point, use the edge material and geometry
+      circleMesh.material = edgeMaterial;
+      circleMesh.geometry = edgeGeometry;
+    }
+    
     scene.add(circleMesh);
   });
 
