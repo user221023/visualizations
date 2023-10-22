@@ -56,19 +56,18 @@ var pointMaterial = new THREE.ShaderMaterial({
         scale: { value: window.innerHeight / 2 }  // Required for proper sizing
     },
 
-vertexShader: `
-    uniform vec3 color1;
-    uniform vec3 color2;
-    uniform float size;
-    uniform float scale;
+fragmentShader: `
     varying vec3 vColor;
     void main() {
-        vColor = mix(color1, color2, position.z);
-        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-        gl_PointSize = size * (scale / -mvPosition.z);
-        gl_Position = projectionMatrix * mvPosition;
+        float r = distance(gl_PointCoord, vec2(0.5, 0.5));
+        float delta = fwidth(r);
+        float alpha = 1.0 - smoothstep(0.5 - delta, 0.5 + delta, r);
+        if (r > 0.5) {  // If the point is out of the circular region
+            discard;
+        }
+        gl_FragColor = vec4(vColor, alpha);
     }
-`,
+`
 fragmentShader: `
     varying vec3 vColor;
     void main() {
