@@ -1,5 +1,5 @@
-import * as THREE from 'https://cdn.skypack.dev/three';
-import { OrbitControls } from 'https://cdn.skypack.dev/three/examples/jsm/controls/OrbitControls';
+import * as THREE from 'https://cdn.skypack.dev/three@0.149.0';
+import { OrbitControls } from 'https://cdn.skypack.dev/three@0.149.0/examples/js/controls/OrbitControls';
 
 async function fetchData() {
   let points;
