@@ -25,7 +25,7 @@ uniform vec3 color;
 uniform float opacity;
 varying vec3 vPosition;
 void main() {
-  float fadeFactor = abs(vPosition.z) / 5.0; // Center is at z=0 so will fade out
+  float fadeFactor = 1.0 - abs(vPosition.y) / 5.0; // Ends at y=±5 will fade out
   gl_FragColor = vec4(color, opacity * fadeFactor);
 }
 `;
