@@ -23,22 +23,28 @@ void main() {
 const fragmentShader = `
 uniform float slider1;
 uniform float slider2;
-uniform vec3 color;
+uniform vec3 exteriorColor;
+uniform vec3 interiorColor;
 uniform float opacity;
 varying vec3 vPosition;
+varying vec3 vNormal;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-95.0 * (x - 0.95)));
+    return 1.0 / (1.0 + exp(-1.0 * slider2 * (x - slider1)));
 }
 
 void main() {
     float distanceFromCenter = length(vPosition) / 5.0;
     float fadeFactor = sigmoid(distanceFromCenter);
-    fadeFactor = 0.2 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.2
-    gl_FragColor = vec4(color, opacity * fadeFactor);
+    fadeFactor = 0.05 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.05
+    
+    vec3 viewDirection = normalize(vPosition); // Direction from fragment to camera
+    float dotProduct = dot(viewDirection, vNormal);
+    
+    vec3 chosenColor = mix(interiorColor, exteriorColor, step(0.0, dotProduct));
+    gl_FragColor = vec4(chosenColor, opacity * fadeFactor);
 }
 `;
-
 
 const settings = {
     slider1: 0.1,
@@ -60,8 +66,9 @@ gui.add(settings, 'slider3', 0, 1).onChange(value => {
 });
 
 const uniforms = {
-    color: { value: new THREE.Color(0x48dcf6) },
-    opacity: { value: 0.5 },
+    exteriorColor: { value: new THREE.Color(0x48dcf6) }, // Replace with your exterior color
+    interiorColor: { value: new THREE.Color(0x9a566f) }, // Replace with your interior color
+    opacity: { value: 0.8 },
     slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 },
     slider3: { value: settings.slider3 }
