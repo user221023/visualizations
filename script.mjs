@@ -1,4 +1,4 @@
-import { THREE } from './three.module.js';
+import * as THREE from './three.module.js';
 import { OrbitControls } from './OrbitControls.js';
 
 const scene = new THREE.Scene();
@@ -10,9 +10,9 @@ document.body.appendChild(renderer.domElement);
 
 const geometry = new THREE.SphereGeometry(5, 32, 32);
 const material = new THREE.MeshStandardMaterial({
-  color: 0x00ff00,
+  color: 0x48dcf6,
   transparent: true,
-  opacity: 0.5,
+  opacity: 0.8,
   wireframe: false,
   side: THREE.DoubleSide // Render both sides of the mesh
 });
