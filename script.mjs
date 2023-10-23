@@ -14,9 +14,9 @@
     const material = new THREE.MeshStandardMaterial({
       color: 0x48dcf6,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.5,
       emissive: 0x48dcf6, // Make the material glow with the same color as the material
-      emissiveIntensity: 0.5, // Adjust the intensity of the glow
+      emissiveIntensity: 0.333, // Adjust the intensity of the glow
       side: THREE.DoubleSide // Render both sides of the mesh
     });
 
