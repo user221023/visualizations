@@ -12,21 +12,23 @@ scene.background = new THREE.Color(0x000000); // Set background to black for bet
 const geometry = new THREE.SphereGeometry(5, 128, 128);
 
 const vertexShader = `
+#extension GL_OES_standard_derivatives : enable
+
 varying vec3 vOriginalPosition;
 varying vec3 vPosition;
 varying vec3 vNormal;
 
 void main() {
-  vOriginalPosition = position;
-  vec3 flattenedPosition = position;
-  flattenedPosition.y *= 1.0 - 0.2 * pow(abs(flattenedPosition.y) / 5.0, 2.0); // Adjust flattening
-  vPosition = flattenedPosition;
-  
-  vec3 e = dFdx(vPosition);
-  vec3 f = dFdy(vPosition);
-  vNormal = normalize(cross(e, f));
+    vOriginalPosition = position;
+    vec3 flattenedPosition = position;
+    flattenedPosition.y *= 1.0 - 0.2 * pow(abs(flattenedPosition.y) / 5.0, 2.0); // Adjust flattening
+    vPosition = flattenedPosition;
+    
+    vec3 dx = dFdx(flattenedPosition);
+    vec3 dy = dFdy(flattenedPosition);
+    vNormal = normalize(cross(dx, dy));
 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(flattenedPosition, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(flattenedPosition, 1.0);
 }
 `;
 
