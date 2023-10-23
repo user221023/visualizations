@@ -77,8 +77,8 @@ void main() {
     geometry.computeVertexNormals();
 
     // Set up OrbitControls
-    // const controls = new OrbitControls(camera, renderer.domElement);
-    // controls.update();
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
 
 // Create an object to hold the values
 const settings = {
