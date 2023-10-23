@@ -1,6 +1,30 @@
     import * as THREE from './three.module.js';
     import { OrbitControls } from './OrbitControls.js';
 
+// Create an object to hold the values
+const settings = {
+    slider1: 0.9,
+    slider2: 25.0,
+    slider3: 0.5
+};
+
+// Initialize dat.GUI
+const gui = new dat.GUI();
+
+// Add the sliders
+gui.add(settings, 'slider1', 0, 1).onChange(value => {
+    // Update the uniform or any other variable when the slider changes
+    uniforms.someUniform.value = value;
+});
+gui.add(settings, 'slider2', 0, 50).onChange(value => {
+    // Update the uniform or any other variable when the slider changes
+    uniforms.someUniform.value = value;
+});
+gui.add(settings, 'slider3', 0, 1).onChange(value => {
+    // Update the uniform or any other variable when the slider changes
+    uniforms.someUniform.value = value;
+});
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -85,30 +109,6 @@ const uniforms = {
     // Set up OrbitControls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
-
-// Create an object to hold the values
-const settings = {
-    slider1: 0.9,
-    slider2: 25.0,
-    slider3: 0.5
-};
-
-// Initialize dat.GUI
-const gui = new dat.GUI();
-
-// Add the sliders
-gui.add(settings, 'slider1', 0, 1).onChange(value => {
-    // Update the uniform or any other variable when the slider changes
-    uniforms.someUniform.value = value;
-});
-gui.add(settings, 'slider2', 0, 50).onChange(value => {
-    // Update the uniform or any other variable when the slider changes
-    uniforms.someUniform.value = value;
-});
-gui.add(settings, 'slider3', 0, 1).onChange(value => {
-    // Update the uniform or any other variable when the slider changes
-    uniforms.someUniform.value = value;
-});
 
     const animate = function () {
         uniforms.slider1.value = guiControls.slider1;
