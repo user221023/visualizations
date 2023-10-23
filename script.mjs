@@ -1,5 +1,5 @@
 import * as THREE from 'https://unpkg.com/three@0.139.2/build/three.module.js';
-import { OrbitControls } from 'https://unpkg.com/three@0.139.2/examples/js/controls/OrbitControls.js';
+import { OrbitalControls } from 'https://unpkg.com/three@0.139.2/examples/js/controls/OrbitalControls.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -25,8 +25,8 @@ for (let i = 0; i < positions.count; i++) {
 
 geometry.computeVertexNormals();
 
-// Create OrbitControls
-const controls = new OrbitControls(camera, renderer.domElement);
+// Create OrbitalControls
+const controls = new OrbitalControls(camera, renderer.domElement);
 controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
 
 const animate = function () {
