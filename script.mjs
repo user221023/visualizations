@@ -14,46 +14,46 @@ const geometry = new THREE.SphereGeometry(5, 128, 128);
 
 const vertexShader = `
 #version 300 es
-#extension GL_OES_standard_derivatives : enable
 precision mediump float;
 
-varying vec3 vOriginalPosition;
-varying vec3 vPosition;
-varying vec3 vNormal;
+in vec3 position;  // Use 'in' instead of 'attribute'
+// ... other inputs
+
+out vec3 vOriginalPosition;
+out vec3 vPosition;
+out vec3 vNormal;
 
 void main() {
-    vOriginalPosition = position;
-    vec3 flattenedPosition = position;
-    flattenedPosition.y *= 1.0 - 0.2 * pow(abs(flattenedPosition.y) / 5.0, 2.0); // Adjust flattening
-    vPosition = flattenedPosition;
+    // Shader code
+    // ...
     
-    float dx = dFdx(flattenedPosition.x);
-    float dy = dFdy(flattenedPosition.y);
+    float dx = dFdx(position.x);
+    float dy = dFdy(position.y);
+    // Use 'position' directly, or if you have a transformed position, use that
     vNormal = normalize(cross(vec3(dx, 0.0, 0.0), vec3(0.0, dy, 0.0)));
-
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(flattenedPosition, 1.0);
+    
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `;
 
 const fragmentShader = `
-uniform float slider1;
-uniform float slider2;
-uniform vec3 exteriorColor;
-uniform vec3 interiorColor;
-uniform float opacity;
-uniform float shellThickness;
-uniform vec3 ambientLight;
-uniform vec3 pointLightPosition;
-uniform vec3 pointLightColor;
-uniform float pointLightIntensity;
+#version 300 es
+precision mediump float;
 
-varying vec3 vOriginalPosition;
-varying vec3 vPosition;
-varying vec3 vNormal;
+in vec3 vOriginalPosition;
+in vec3 vPosition;
+in vec3 vNormal;
+// ... other inputs
 
-float sigmoid(float x) {
-  return 1.0 / (1.0 + exp(-1.0 * slider2 * (x - slider1)));
+out vec4 fragColor;
+
+void main() {
+    // Fragment shader code
+    // ...
+    fragColor = vec4(vNormal, 1.0);  // Example output
 }
+`;
+
 
 void main() {
   float originalDistance = length(vOriginalPosition) / 5.0;
