@@ -26,7 +26,7 @@ uniform float opacity;
 varying vec3 vPosition;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-slider2 * (x - slider1)));
+    return 1.0 / (1.0 + exp(-1 * slider2 * (x - slider1)));
 }
 
 void main() {
@@ -70,7 +70,7 @@ void main() {
     positions.needsUpdate = true;
     for (let i = 0; i < positions.count; i++) {
       const y = positions.getY(i);
-      const scaleFactor = 1 - (0.333 * (Math.abs(y) / 5) ** 2); // Adjust flattening
+      const scaleFactor = 1 - (slider3 * (Math.abs(y) / 5) ** 2); // Adjust flattening
       positions.setY(i, y * scaleFactor);
     }
 
@@ -84,7 +84,7 @@ void main() {
 const settings = {
     slider1: 0.9,
     slider2: 25.0,
-    slider3: 0.5
+    slider3: 0.33
 };
 
 // Initialize dat.GUI
