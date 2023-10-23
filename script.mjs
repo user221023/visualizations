@@ -34,7 +34,7 @@ float sigmoid(float x) {
 void main() {
     float distanceFromCenter = length(vPosition) / 5.0;
     float fadeFactor = sigmoid(distanceFromCenter);
-    fadeFactor = 0.1 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.1
+    fadeFactor = 0.05 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.05
     gl_FragColor = vec4(color, opacity * fadeFactor);
 }
 `;
@@ -61,7 +61,7 @@ gui.add(settings, 'slider3', 0, 1).onChange(value => {
 
 const uniforms = {
     color: { value: new THREE.Color(0x48dcf6) },
-    opacity: { value: 0.8 },
+    opacity: { value: 0.5 },
     slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 },
     slider3: { value: settings.slider3 }
