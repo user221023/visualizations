@@ -6,28 +6,15 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.SphereGeometry(5, 32, 32); // radius, widthSegments, heightSegments
+const geometry = new THREE.SphereGeometry(5, 32, 32);
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 const oblateSpheroid = new THREE.Mesh(geometry, material);
 scene.add(oblateSpheroid);
+
 camera.position.z = 15;
 
-// Manipulate vertices
-const positions = geometry.attributes.position;
-for (let i = 0; i < positions.count; i++) {
-  const y = positions.getY(i);
-  const scaleFactor = 1 + (0.2 * Math.abs(y) / 5);
-  positions.setXYZ(
-    i,
-    positions.getX(i) * scaleFactor,
-    positions.getY(i) * scaleFactor,
-    positions.getZ(i) * scaleFactor
-  );
-}
-
-// Update the geometry after changing the vertices
-geometry.attributes.position.needsUpdate = true;
-geometry.computeVertexNormals();
+// Apply scaling to create an oblate spheroid
+oblateSpheroid.scale.set(1, 0.6, 1); // scaleX, scaleY, scaleZ
 
 const animate = function () {
   requestAnimationFrame(animate);
