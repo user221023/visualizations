@@ -21,6 +21,8 @@ void main() {
 `;
 
 const fragmentShader = `
+uniform float slider1;
+uniform float slider2;
 uniform vec3 color;
 uniform float opacity;
 varying vec3 vPosition;
