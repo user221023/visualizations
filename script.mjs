@@ -28,14 +28,12 @@ varying vec3 vPosition;
 void main() {
   float distanceFromCenter = length(vPosition.xy); // Calculate the distance from the center in the XY plane
   float maxDistance = 5.0; // Radius of the spheroid
-  float fadeFactor = smoothstep(0.0, maxDistance, distanceFromCenter); // Fade smoothly from the center to the outer edges
   
-  float adjustedOpacity = mix(0.0, opacity, fadeFactor); // Interpolate between 0 (center) and original opacity (outer edge)
+  // Interpolate between 1 (outer edge) and 0 (center)
+  float fadeFactor = distanceFromCenter / maxDistance; 
+  float adjustedOpacity = mix(opacity, 0.0, fadeFactor); // Fade from original opacity to 0
   
-  float intensity = pow(0.5 - dot(normalize(vPosition), vec3(0.0, 0.0, 1.0)), 4.0);
-  intensity = clamp(intensity, 0.0, 1.0);
-  
-  gl_FragColor = vec4(color, adjustedOpacity) * (intensity + 0.5);
+  gl_FragColor = vec4(color, adjustedOpacity);
 }
     `;
 
