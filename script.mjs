@@ -23,19 +23,14 @@ void main() {
 const fragmentShader = `
 uniform vec3 color;
 uniform float opacity;
+varying vec3 vNormal;
 varying vec3 vPosition;
-
 void main() {
-  float distanceFromCenter = length(vPosition.xy); // Calculate the distance from the center in the XY plane
-  float maxDistance = 5.0; // Radius of the spheroid
-  
-  // Interpolate between 1 (outer edge) and 0 (center)
-  float fadeFactor = distanceFromCenter / maxDistance; 
-  float adjustedOpacity = mix(opacity, 0.0, fadeFactor); // Fade from original opacity to 0
-  
-  gl_FragColor = vec4(color, adjustedOpacity);
+  float intensity = pow(0.5 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+  float fadeFactor = 1.0 - abs(vPosition.z) / 5.0; // Assuming 5 is the maximum absolute z-value, adjust if needed
+  gl_FragColor = vec4(color, opacity * fadeFactor) * (intensity + 0.5);
 }
-    `;
+`;
 
     const uniforms = {
       color: { value: new THREE.Color(0x48dcf6) },
