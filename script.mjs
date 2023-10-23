@@ -15,9 +15,9 @@ const geometry = new THREE.SphereGeometry(5, 128, 128);
 const vertexShader = `
 #version 300 es
 precision mediump float;
-
-in vec3 position;  // Use 'in' instead of 'attribute'
-// ... other inputs
+in vec3 position;
+in vec3 normal;
+// ... other inputs as necessary
 
 out vec3 vOriginalPosition;
 out vec3 vPosition;
@@ -26,13 +26,16 @@ out vec3 vNormal;
 void main() {
     // Shader code
     // ...
-    
-    float dx = dFdx(position.x);
-    float dy = dFdy(position.y);
-    // Use 'position' directly, or if you have a transformed position, use that
+    vOriginalPosition = position;
+    vPosition = position;
+    vNormal = normal;
+
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * mvPosition;
+
+    float dx = dFdx(mvPosition.x);
+    float dy = dFdy(mvPosition.y);
     vNormal = normalize(cross(vec3(dx, 0.0, 0.0), vec3(0.0, dy, 0.0)));
-    
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
 `;
 
