@@ -24,33 +24,34 @@ void main() {
 `;
 
 const fragmentShader = `
-precision highp float;
 uniform float slider1;
 uniform float slider2;
 uniform vec3 exteriorColor;
 uniform vec3 interiorColor;
 uniform float opacity;
+uniform float shellThickness;
+varying vec3 vOriginalPosition;
 varying vec3 vPosition;
 varying vec3 vNormal;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-1.0 * slider2 * (x - slider1)));
+  return 1.0 / (1.0 + exp(-1.0 * slider2 * (x - slider1)));
 }
 
 void main() {
-    float originalDistance = length(vOriginalPosition) / 5.0;
-    float fadeFactor = sigmoid(originalDistance);
-    fadeFactor = 0.05 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.05
-    
-    // Calculate the view direction based on the flattened position
-    vec3 viewDirection = normalize(vPosition);
-    float dotProduct = dot(viewDirection, vNormal);
-    
-    // Determine the color based on the original position
-    float originalNormalizedDistance = length(vOriginalPosition) / 5.0;
-    vec3 chosenColor = mix(interiorColor, exteriorColor, smoothstep(1.0 - shellThickness, 1.0, originalNormalizedDistance));
-    
-    gl_FragColor = vec4(chosenColor, opacity * fadeFactor);
+  float originalDistance = length(vOriginalPosition) / 5.0;
+  float fadeFactor = sigmoid(originalDistance);
+  fadeFactor = 0.05 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.05
+  
+  // Calculate the view direction based on the flattened position
+  vec3 viewDirection = normalize(vPosition);
+  float dotProduct = dot(viewDirection, vNormal);
+  
+  // Determine the color based on the original position
+  float originalNormalizedDistance = length(vOriginalPosition) / 5.0;
+  vec3 chosenColor = mix(interiorColor, exteriorColor, smoothstep(1.0 - shellThickness, 1.0, originalNormalizedDistance));
+  
+  gl_FragColor = vec4(chosenColor, opacity * fadeFactor);
 }
 `;
 
@@ -73,7 +74,8 @@ const uniforms = {
     exteriorColor: { value: new THREE.Color(0x48dcf6) }, // Replace with your exterior color
     interiorColor: { value: new THREE.Color(0x9a566f) }, // Replace with your interior color
     opacity: { value: 0.8 },
-    slider1: { value: settings.slider1 },
+    shellThickness: { value: 0.05 }, // Adjust as necessary
+     slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 }
 };
 
