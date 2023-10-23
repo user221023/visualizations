@@ -26,7 +26,7 @@ uniform float opacity;
 varying vec3 vPosition;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-1 * slider2 * (x - slider1)));
+    return 1.0 / (1.0 + exp(-1.0 * slider2 * (x - slider1)));
 }
 
 void main() {
@@ -37,10 +37,14 @@ void main() {
 
 `;
 
-    const uniforms = {
-      color: { value: new THREE.Color(0x48dcf6) },
-      opacity: { value: 0.5 }
-    };
+const uniforms = {
+  color: { value: new THREE.Color(0x48dcf6) },
+  opacity: { value: 0.5 },
+  slider1: { value: guiControls.slider1 }, 
+  slider2: { value: guiControls.slider2 },
+  slider3: { value: guiControls.slider3 },
+};
+
 
     const material = new THREE.ShaderMaterial({
       vertexShader,
@@ -105,7 +109,9 @@ gui.add(settings, 'slider3', 0, 1).onChange(value => {
 });
 
     const animate = function () {
-      requestAnimationFrame(animate);
+        uniforms.slider1.value = guiControls.slider1;
+       uniforms.slider2.value = guiControls.slider2;
+        requestAnimationFrame(animate);
       controls.update(); // Only required if controls.enableDamping = true, or if controls.autoRotate = true
       renderer.render(scene, camera);
     };
