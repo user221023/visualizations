@@ -26,7 +26,7 @@ uniform float opacity;
 varying vec3 vPosition;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-25.0 * (x - 0.9)));
+    return 1.0 / (1.0 + exp(-slider2 * (x - slider1)));
 }
 
 void main() {
@@ -79,6 +79,30 @@ void main() {
     // Set up OrbitControls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
+
+// Create an object to hold the values
+const settings = {
+    slider1: 0.9,
+    slider2: 25.0,
+    slider3: 0.5
+};
+
+// Initialize dat.GUI
+const gui = new dat.GUI();
+
+// Add the sliders
+gui.add(settings, 'slider1', 0, 1).onChange(value => {
+    // Update the uniform or any other variable when the slider changes
+    uniforms.someUniform.value = value;
+});
+gui.add(settings, 'slider2', 0, 50).onChange(value => {
+    // Update the uniform or any other variable when the slider changes
+    uniforms.someUniform.value = value;
+});
+gui.add(settings, 'slider3', 0, 1).onChange(value => {
+    // Update the uniform or any other variable when the slider changes
+    uniforms.someUniform.value = value;
+});
 
     const animate = function () {
       requestAnimationFrame(animate);
