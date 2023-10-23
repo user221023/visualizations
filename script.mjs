@@ -12,23 +12,25 @@
 
     const geometry = new THREE.SphereGeometry(5, 32, 32);
 
-    const vertexShader = `
-    varying vec3 vNormal;
-    void main() {
-      vNormal = normalize(normalMatrix * normal);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
+varying vec3 vPosition;
+void main() {
+  vPosition = position; // Pass the position to the fragment shader
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
     `;
 
-    const fragmentShader = `
-    uniform vec3 color;
-    uniform float opacity;
-    varying vec3 vNormal;
-    void main() {
-      float intensity = pow(0.5 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 4.0); // Increase the power for a smoother glow
-      intensity = clamp(intensity, 0.0, 1.0); // Clamp the intensity between 0 and 1
-      gl_FragColor = vec4(color, opacity) * (intensity + 0.5);
-    }
+uniform vec3 color;
+uniform float opacity;
+varying vec3 vPosition;
+void main() {
+  float distanceFromCenter = length(vPosition); // Calculate distance from center
+  float fadeFactor = distanceFromCenter / 5.0; // Normalize assuming the spheroid has a radius of 5
+  float adjustedOpacity = opacity * fadeFactor; // Adjust the opacity
+  
+  float intensity = pow(0.5 - dot(normalize(vPosition), vec3(0.0, 0.0, 1.0)), 4.0);
+  intensity = clamp(intensity, 0.0, 1.0);
+  gl_FragColor = vec4(color, adjustedOpacity) * (intensity + 0.5);
+}
     `;
 
     const uniforms = {
