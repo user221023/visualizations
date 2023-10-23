@@ -12,6 +12,7 @@
 
     const geometry = new THREE.SphereGeometry(5, 32, 32);
 
+const vertexShader = `
 varying vec3 vPosition;
 void main() {
   vPosition = position; // Pass the position to the fragment shader
@@ -19,6 +20,7 @@ void main() {
 }
     `;
 
+const fragmentShader = `
 uniform vec3 color;
 uniform float opacity;
 varying vec3 vPosition;
