@@ -15,20 +15,18 @@
 const vertexShader = `
 varying vec3 vPosition;
 void main() {
-  vPosition = position; // Pass the vertex's position to the fragment shader
+  vPosition = position;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
-    `;
+`;
 
 const fragmentShader = `
 uniform vec3 color;
 uniform float opacity;
-varying vec3 vNormal;
 varying vec3 vPosition;
 void main() {
-  float intensity = pow(0.5 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-  float fadeFactor = max(0.3, 1.0 - abs(vPosition.z) / 5.0); // Ensuring fadeFactor doesn't go below 0.3
-  gl_FragColor = vec4(color, opacity * fadeFactor) * (intensity + 0.5);
+  float fadeFactor = abs(vPosition.z) / 5.0; // Center is at z=0 so will fade out
+  gl_FragColor = vec4(color, opacity * fadeFactor);
 }
 `;
 
