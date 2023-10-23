@@ -26,7 +26,7 @@ uniform float opacity;
 varying vec3 vPosition;
 void main() {
   float distanceFromEquator = abs(vPosition.y);
-  float fadeFactor = 1.0 - pow(distanceFromEquator / 5.0, 1.8);
+  float fadeFactor = 1.0 - pow(distanceFromEquator / 5.0, 2.4);
   gl_FragColor = vec4(color, opacity * fadeFactor);
 }
 `;
