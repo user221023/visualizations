@@ -28,31 +28,31 @@ uniform float opacity;
 varying vec3 vPosition;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-1.0 * slider2 * (x - slider1)));
+    return 1.0 / (1.0 + exp(-1.0 * 95 * (x - 0.95)));
 }
 
 void main() {
     float distanceFromCenter = length(vPosition) / 5.0;
     float fadeFactor = sigmoid(distanceFromCenter);
-    fadeFactor = 0.2 + 0.8 * fadeFactor; // Ensures fadeFactor doesn't go below 0.2
+    fadeFactor = slider1 + slider2 * fadeFactor; // Ensures fadeFactor doesn't go below 0.2
     gl_FragColor = vec4(color, opacity * fadeFactor);
 }
 `;
 
 
 const settings = {
-    slider1: 0.95,
-    slider2: 95.0,
+    slider1: 0.1,
+    slider2: 0.8,
     slider3: 0.5
 };
 
 // Initialize dat.GUI
 const gui = new dat.GUI();
 
-gui.add(settings, 'slider1', 0.8, 1.0).onChange(value => {
+gui.add(settings, 'slider1', 0.0, 0.3).onChange(value => {
     uniforms.slider1.value = value;
 });
-gui.add(settings, 'slider2', 80, 100).onChange(value => {
+gui.add(settings, 'slider2', 0.5, 1).onChange(value => {
     uniforms.slider2.value = value;
 });
 gui.add(settings, 'slider3', 0, 1).onChange(value => {
