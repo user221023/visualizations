@@ -14,11 +14,14 @@ const geometry = new THREE.SphereGeometry(5, 128, 128);
 const vertexShader = `
 varying vec3 vOriginalPosition;
 varying vec3 vPosition;
+varying vec3 vNormal;
+
 void main() {
   vOriginalPosition = position;
   vec3 flattenedPosition = position;
   flattenedPosition.y *= 1.0 - 0.2 * pow(abs(flattenedPosition.y) / 5.0, 2.0); // Adjust flattening
   vPosition = flattenedPosition;
+  vNormal = normal;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(flattenedPosition, 1.0);
 }
 `;
