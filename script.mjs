@@ -1,4 +1,5 @@
 import * as THREE from 'https://unpkg.com/three@0.139.2/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.139.2/examples/js/controls/OrbitControls.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -18,16 +19,19 @@ const positions = geometry.attributes.position;
 positions.needsUpdate = true;
 for (let i = 0; i < positions.count; i++) {
   const y = positions.getY(i);
-  const scaleFactor = 1 - (0.4 * Math.abs(y) / 5); // Adjust the 0.4 value for more/less flattening
+  const scaleFactor = 1 - (0.4 * Math.abs(y) / 5);
   positions.setY(i, y * scaleFactor);
 }
 
 geometry.computeVertexNormals();
 
+// Create OrbitControls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
+
 const animate = function () {
   requestAnimationFrame(animate);
-  oblateSpheroid.rotation.x += 0.01;
-  oblateSpheroid.rotation.y += 0.01;
+  controls.update(); // only required if controls.enableDamping = true, or if controls.autoRotate = true
   renderer.render(scene, camera);
 };
 
