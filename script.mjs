@@ -11,13 +11,37 @@
     scene.background = new THREE.Color(0x000000); // Set background to black for better contrast
 
     const geometry = new THREE.SphereGeometry(5, 32, 32);
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x48dcf6,
+
+    const vertexShader = `
+    varying vec3 vNormal;
+    void main() {
+      vNormal = normalize(normalMatrix * normal);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+    `;
+
+    const fragmentShader = `
+    uniform vec3 color;
+    uniform float opacity;
+    varying vec3 vNormal;
+    void main() {
+      float intensity = pow(0.5 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+      gl_FragColor = vec4(color, opacity) * (intensity + 0.5);
+    }
+    `;
+
+    const uniforms = {
+      color: { value: new THREE.Color(0x48dcf6) },
+      opacity: { value: 0.5 }
+    };
+
+    const material = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms,
       transparent: true,
-      opacity: 0.5,
-      emissive: 0x48dcf6, // Make the material glow with the same color as the material
-      emissiveIntensity: 0.333, // Adjust the intensity of the glow
-      side: THREE.DoubleSide // Render both sides of the mesh
+      side: THREE.DoubleSide,
+      depthWrite: false,
     });
 
     const oblateSpheroid = new THREE.Mesh(geometry, material);
