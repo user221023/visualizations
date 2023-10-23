@@ -39,8 +39,8 @@ void main() {
 `;
 
 const settings = {
-    slider1: 0.9,
-    slider2: 25.0,
+    slider1: 0.95,
+    slider2: 50.0,
     slider3: 0.5
 };
 
@@ -50,7 +50,7 @@ const gui = new dat.GUI();
 gui.add(settings, 'slider1', 0, 1).onChange(value => {
     uniforms.slider1.value = value;
 });
-gui.add(settings, 'slider2', 0, 50).onChange(value => {
+gui.add(settings, 'slider2', 0, 100).onChange(value => {
     uniforms.slider2.value = value;
 });
 gui.add(settings, 'slider3', 0, 1).onChange(value => {
@@ -59,7 +59,7 @@ gui.add(settings, 'slider3', 0, 1).onChange(value => {
 
 const uniforms = {
     color: { value: new THREE.Color(0x48dcf6) },
-    opacity: { value: 0.5 },
+    opacity: { value: 0.667 },
     slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 },
     slider3: { value: settings.slider3 }
