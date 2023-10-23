@@ -13,8 +13,16 @@ scene.add(oblateSpheroid);
 
 camera.position.z = 15;
 
-// Apply scaling to create an oblate spheroid
-oblateSpheroid.scale.set(1, 0.6, 1); // scaleX, scaleY, scaleZ
+// Manipulate vertices
+const positions = geometry.attributes.position;
+positions.needsUpdate = true;
+for (let i = 0; i < positions.count; i++) {
+  const y = positions.getY(i);
+  const scaleFactor = 1 - (0.4 * Math.abs(y) / 5); // Adjust the 0.4 value for more/less flattening
+  positions.setY(i, y * scaleFactor);
+}
+
+geometry.computeVertexNormals();
 
 const animate = function () {
   requestAnimationFrame(animate);
