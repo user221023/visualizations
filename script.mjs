@@ -39,7 +39,7 @@ void main() {
 `;
 
 const settings = {
-    slider1: 0.95,
+    slider1: 0.925,
     slider2: 50.0,
     slider3: 0.5
 };
@@ -93,7 +93,7 @@ scene.add(oblateSpheroid);
     positions.needsUpdate = true;
     for (let i = 0; i < positions.count; i++) {
       const y = positions.getY(i);
-      const scaleFactor = 1 - (0.3 * (Math.abs(y) / 5) ** 2); // Adjust flattening
+      const scaleFactor = 1 - (0.25 * (Math.abs(y) / 5) ** 2); // Adjust flattening
       positions.setY(i, y * scaleFactor);
     }
 
