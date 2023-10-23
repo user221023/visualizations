@@ -39,7 +39,7 @@ void main() {
 `;
 
 const settings = {
-    slider1: 0.925,
+    slider1: 0.95,
     slider2: 95.0,
     slider3: 0.5
 };
@@ -47,10 +47,10 @@ const settings = {
 // Initialize dat.GUI
 const gui = new dat.GUI();
 
-gui.add(settings, 'slider1', 0.5, 1.5).onChange(value => {
+gui.add(settings, 'slider1', 0.8, 1.0).onChange(value => {
     uniforms.slider1.value = value;
 });
-gui.add(settings, 'slider2', 50, 150).onChange(value => {
+gui.add(settings, 'slider2', 80, 100).onChange(value => {
     uniforms.slider2.value = value;
 });
 gui.add(settings, 'slider3', 0, 1).onChange(value => {
@@ -93,7 +93,7 @@ scene.add(oblateSpheroid);
     positions.needsUpdate = true;
     for (let i = 0; i < positions.count; i++) {
       const y = positions.getY(i);
-      const scaleFactor = 1 - (0.25 * (Math.abs(y) / 5) ** 2); // Adjust flattening
+      const scaleFactor = 1 - (0.2 * (Math.abs(y) / 5) ** 2); // Adjust flattening
       positions.setY(i, y * scaleFactor);
     }
 
