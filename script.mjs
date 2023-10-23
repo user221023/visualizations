@@ -21,7 +21,11 @@ void main() {
   vec3 flattenedPosition = position;
   flattenedPosition.y *= 1.0 - 0.2 * pow(abs(flattenedPosition.y) / 5.0, 2.0); // Adjust flattening
   vPosition = flattenedPosition;
-  vNormal = normal;
+  
+  vec3 e = dFdx(vPosition);
+  vec3 f = dFdy(vPosition);
+  vNormal = normalize(cross(e, f));
+
   gl_Position = projectionMatrix * modelViewMatrix * vec4(flattenedPosition, 1.0);
 }
 `;
@@ -33,6 +37,11 @@ uniform vec3 exteriorColor;
 uniform vec3 interiorColor;
 uniform float opacity;
 uniform float shellThickness;
+uniform vec3 ambientLight;
+uniform vec3 pointLightPosition;
+uniform vec3 pointLightColor;
+uniform float pointLightIntensity;
+
 varying vec3 vOriginalPosition;
 varying vec3 vPosition;
 varying vec3 vNormal;
@@ -46,15 +55,20 @@ void main() {
   float fadeFactor = sigmoid(originalDistance);
   fadeFactor = 0.05 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.05
   
-  // Calculate the view direction based on the flattened position
-  vec3 viewDirection = normalize(vPosition);
-  float dotProduct = dot(viewDirection, vNormal);
-  
   // Determine the color based on the original position
-  float originalNormalizedDistance = length(vOriginalPosition) / 5.0;
+  float originalNormalizedDistance = originalDistance;
   vec3 chosenColor = mix(interiorColor, exteriorColor, smoothstep(1.0 - shellThickness, 1.0, originalNormalizedDistance));
   
-  gl_FragColor = vec4(chosenColor, opacity * fadeFactor);
+  // Lighting calculations
+  vec3 normalizedNormal = normalize(vNormal);
+  vec3 lightDir = normalize(pointLightPosition - vPosition);
+  float diff = max(dot(normalizedNormal, lightDir), 0.0);
+  vec3 diffuse = diff * pointLightColor * pointLightIntensity;
+  
+  vec3 ambient = ambientLight * chosenColor;
+  vec3 result = (ambient + diffuse) * chosenColor;
+  
+  gl_FragColor = vec4(result, opacity * fadeFactor);
 }
 `;
 
@@ -77,8 +91,12 @@ const uniforms = {
     exteriorColor: { value: new THREE.Color(0x48dcf6) }, // Replace with your exterior color
     interiorColor: { value: new THREE.Color(0x9a566f) }, // Replace with your interior color
     opacity: { value: 0.8 },
+    uniforms.ambientLight = { value: new THREE.Color(ambientLight.color).multiplyScalar(ambientLight.intensity) };
+    uniforms.pointLightPosition = { value: pointLight.position };
+    uniforms.pointLightColor = { value: new THREE.Color(pointLight.color) };
+    uniforms.pointLightIntensity = { value: pointLight.intensity };
     shellThickness: { value: 0.05 }, // Adjust as necessary
-     slider1: { value: settings.slider1 },
+    slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 }
 };
 
@@ -99,8 +117,12 @@ const light = new THREE.PointLight(0xffffff, 5, 100);
 light.position.set(0, 0, 10);
 scene.add(light);
 
-const ambientLight = new THREE.AmbientLight(0x404040);
+const ambientLight = new THREE.AmbientLight(0x404040); // Adjust as necessary
 scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 5, 100); // Adjust as necessary
+pointLight.position.set(0, 0, 10);
+scene.add(pointLight);
 
 camera.position.z = 15;
 
