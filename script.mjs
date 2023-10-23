@@ -12,7 +12,7 @@ const geometry = new THREE.SphereGeometry(5, 32, 32);
 const material = new THREE.MeshStandardMaterial({
   color: 0x48dcf6,
   transparent: true,
-  opacity: 0.8,
+  opacity: 0.2,
   wireframe: false,
   side: THREE.DoubleSide // Render both sides of the mesh
 });
