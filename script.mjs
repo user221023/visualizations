@@ -34,7 +34,7 @@ float sigmoid(float x) {
 void main() {
     float distanceFromCenter = length(vPosition) / 5.0;
     float fadeFactor = sigmoid(distanceFromCenter);
-    fadeFactor = 0.05 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.05
+    fadeFactor = 0.2 + 0.8 * fadeFactor; // Ensures fadeFactor doesn't go below 0.2
     gl_FragColor = vec4(color, opacity * fadeFactor);
 }
 `;
