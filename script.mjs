@@ -26,14 +26,14 @@ uniform float opacity;
 varying vec3 vPosition;
 void main() {
   float distanceFromEquator = abs(vPosition.y);
-  float fadeFactor = 1.0 - pow(distanceFromEquator / 5.0, 2.1);
+  float fadeFactor = 1.0 - pow(distanceFromEquator / 5.0, 1.8);
   gl_FragColor = vec4(color, opacity * fadeFactor);
 }
 `;
 
     const uniforms = {
       color: { value: new THREE.Color(0x48dcf6) },
-      opacity: { value: 0.4 }
+      opacity: { value: 0.5 }
     };
 
     const material = new THREE.ShaderMaterial({
