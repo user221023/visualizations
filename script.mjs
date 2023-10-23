@@ -19,8 +19,8 @@ const positions = geometry.attributes.position;
 positions.needsUpdate = true;
 for (let i = 0; i < positions.count; i++) {
   const y = positions.getY(i);
-  const scaleFactor = 1 - (0.4 * Math.abs(y) / 5);
-  positions.setY(i, y * scaleFactor);
+const scaleFactor = 1 - (0.4 * (Math.abs(y) / 5) ** 2);
+positions.setY(i, y * scaleFactor);
 }
 
 geometry.computeVertexNormals();
