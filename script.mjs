@@ -15,7 +15,7 @@
 const vertexShader = `
 varying vec3 vPosition;
 void main() {
-  vPosition = position; // Pass the position to the fragment shader
+  vPosition = position; // Pass the vertex's position to the fragment shader
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }
     `;
@@ -25,9 +25,9 @@ uniform vec3 color;
 uniform float opacity;
 varying vec3 vPosition;
 void main() {
-  float distanceFromCenter = length(vPosition); // Calculate distance from center
-  float fadeFactor = distanceFromCenter / 5.0; // Normalize assuming the spheroid has a radius of 5
-  float adjustedOpacity = opacity * fadeFactor; // Adjust the opacity
+  float distanceFromCenter = length(vPosition.xy); // Calculate the distance from the center in the XY plane
+  float fadeFactor = distanceFromCenter / 5.0; // Normalize with a radius of 5
+  float adjustedOpacity = mix(opacity, 0.0, 1.0 - fadeFactor); // Interpolate between original opacity and 0
   
   float intensity = pow(0.5 - dot(normalize(vPosition), vec3(0.0, 0.0, 1.0)), 4.0);
   intensity = clamp(intensity, 0.0, 1.0);
