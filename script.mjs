@@ -70,7 +70,7 @@ void main() {
     positions.needsUpdate = true;
     for (let i = 0; i < positions.count; i++) {
       const y = positions.getY(i);
-      const scaleFactor = 1 - (0.333 * (Math.abs(y) / 5) ** 2); // Adjust flattening
+      const scaleFactor = 1 - (slider3 * (Math.abs(y) / 5) ** 2); // Adjust flattening
       positions.setY(i, y * scaleFactor);
     }
 
@@ -84,7 +84,7 @@ void main() {
 const settings = {
     slider1: 0.9,
     slider2: 25.0,
-    slider3: 0.333
+    slider3: 0.333,
 };
 
 // Initialize dat.GUI
