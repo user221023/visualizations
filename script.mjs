@@ -26,7 +26,7 @@ uniform float opacity;
 varying vec3 vPosition;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-15.0 * (x - 0.9)));
+    return 1.0 / (1.0 + exp(-25.0 * (x - 0.9)));
 }
 
 void main() {
