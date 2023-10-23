@@ -94,23 +94,11 @@ const uniforms = {
     shellThickness: { value: 0.05 },
     slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 },
-    ambientLight: { value: new THREE.Color(0x404040).multiplyScalar(1) }, // temporary default value
-    pointLightPosition: { value: new THREE.Vector3(0, 0, 10) }, // temporary default value
+    ambientLight: { value: new THREE.Color(0x404040).multiplyScalar(1) }, // Default value
+    pointLightPosition: { value: new THREE.Vector3(0, 0, 10) }, // Default value
     pointLightColor: { value: new THREE.Color(0xffffff) },
-    pointLightIntensity: { value: 5 } // temporary default value
+    pointLightIntensity: { value: 5 } // Default value
 };
-
-const ambientLight = new THREE.AmbientLight(0x404040);
-scene.add(ambientLight);
-uniforms.ambientLight.value = new THREE.Color(ambientLight.color).multiplyScalar(ambientLight.intensity);
-
-const pointLight = new THREE.PointLight(0xffffff, 5, 100);
-pointLight.position.set(0, 0, 10);
-scene.add(pointLight);
-uniforms.pointLightPosition.value = pointLight.position;
-uniforms.pointLightColor.value = new THREE.Color(pointLight.color);
-uniforms.pointLightIntensity.value = pointLight.intensity;
-
 
 const material = new THREE.ShaderMaterial({
     vertexShader,
@@ -125,16 +113,16 @@ const oblateSpheroid = new THREE.Mesh(geometry, material);
 scene.add(oblateSpheroid);
 
 // Set up lighting
-const light = new THREE.PointLight(0xffffff, 5, 100);
-light.position.set(0, 0, 10);
-scene.add(light);
-
 const ambientLight = new THREE.AmbientLight(0x404040); // Adjust as necessary
 scene.add(ambientLight);
+uniforms.ambientLight.value = new THREE.Color(ambientLight.color).multiplyScalar(ambientLight.intensity);
 
 const pointLight = new THREE.PointLight(0xffffff, 5, 100); // Adjust as necessary
 pointLight.position.set(0, 0, 10);
 scene.add(pointLight);
+uniforms.pointLightPosition.value = pointLight.position;
+uniforms.pointLightColor.value = new THREE.Color(pointLight.color);
+uniforms.pointLightIntensity.value = pointLight.intensity;
 
 camera.position.z = 15;
 
@@ -142,9 +130,9 @@ camera.position.z = 15;
 const positions = geometry.attributes.position;
 positions.needsUpdate = true;
 for (let i = 0; i < positions.count; i++) {
-  const y = positions.getY(i);
-  const scaleFactor = 1 - (0.2 * (Math.abs(y) / 5) ** 2);
-  positions.setY(i, y * scaleFactor);
+    const y = positions.getY(i);
+    const scaleFactor = 1 - (0.2 * (Math.abs(y) / 5) ** 2);
+    positions.setY(i, y * scaleFactor);
 }
 
 geometry.computeVertexNormals();
