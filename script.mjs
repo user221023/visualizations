@@ -1,4 +1,4 @@
-import * as THREE from 'https://unpkg.com/three@0.139.2/build/three.module.js';
+import { THREE } from './three.module.js';
 import { OrbitControls } from './OrbitControls.js';
 
 const scene = new THREE.Scene();
