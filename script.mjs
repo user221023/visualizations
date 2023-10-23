@@ -6,10 +6,17 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.EllipsoidGeometry(5, 5, 3); // radiusX, radiusY, radiusZ
+const geometry = new THREE.SphereGeometry(5, 32, 32); // radius, widthSegments, heightSegments
+
+geometry.vertices.forEach(vertex => {
+  const y = vertex.y;
+  vertex.multiplyScalar(1 + (0.2 * Math.abs(y) / 5)); // Adjust the 0.2 value to make the top and bottom flatter
+});
+
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 const oblateSpheroid = new THREE.Mesh(geometry, material);
 scene.add(oblateSpheroid);
+
 
 camera.position.z = 10;
 
