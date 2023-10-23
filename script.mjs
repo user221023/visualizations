@@ -13,7 +13,7 @@ scene.background = new THREE.Color(0x000000); // Set background to black for bet
 const geometry = new THREE.SphereGeometry(5, 128, 128);
 
 const vertexShader = `
-#version 100 // Only include this line if you are explicitly setting a GLSL version
+#version 300 es
 #extension GL_OES_standard_derivatives : enable
 precision mediump float;
 
