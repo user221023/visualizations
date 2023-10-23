@@ -24,13 +24,17 @@ const fragmentShader = `
 uniform vec3 color;
 uniform float opacity;
 varying vec3 vPosition;
+
 void main() {
   float distanceFromCenter = length(vPosition.xy); // Calculate the distance from the center in the XY plane
-  float fadeFactor = distanceFromCenter / 5.0; // Normalize with a radius of 5
-  float adjustedOpacity = mix(opacity, 0.0, 1.0 - fadeFactor); // Interpolate between original opacity and 0
+  float maxDistance = 5.0; // Radius of the spheroid
+  float fadeFactor = smoothstep(0.0, maxDistance, distanceFromCenter); // Fade smoothly from the center to the outer edges
+  
+  float adjustedOpacity = mix(0.0, opacity, fadeFactor); // Interpolate between 0 (center) and original opacity (outer edge)
   
   float intensity = pow(0.5 - dot(normalize(vPosition), vec3(0.0, 0.0, 1.0)), 4.0);
   intensity = clamp(intensity, 0.0, 1.0);
+  
   gl_FragColor = vec4(color, adjustedOpacity) * (intensity + 0.5);
 }
     `;
