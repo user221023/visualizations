@@ -10,7 +10,7 @@ document.body.appendChild(renderer.domElement);
 
 scene.background = new THREE.Color(0x000000); // Set background to black for better contrast
 
-const geometry = new THREE.SphereGeometry(5, 32, 32);
+const geometry = new THREE.SphereGeometry(5, 128, 128);
 
 const vertexShader = `
 varying vec3 vPosition;
