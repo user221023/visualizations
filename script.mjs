@@ -37,14 +37,13 @@ float sigmoid(float x) {
 }
 
 void main() {
-    float distanceFromCenter = length(vPosition) / 5.0;
-    float fadeFactor = sigmoid(distanceFromCenter);
+    float distanceFromCenter = length(vPosition);
+    float normalizedDistance = distanceFromCenter / 5.0; // assuming the sphere radius is 5
+    float shellThickness = 0.1; // you can adjust this value
+    float fadeFactor = sigmoid(normalizedDistance);
     fadeFactor = 0.05 + 0.95 * fadeFactor; // Ensures fadeFactor doesn't go below 0.05
-    
-    vec3 viewDirection = normalize(vPosition); // Direction from fragment to camera
-    float dotProduct = dot(viewDirection, vNormal);
-    
-    vec3 chosenColor = mix(interiorColor, exteriorColor, step(0.0, dotProduct));
+
+    vec3 chosenColor = mix(interiorColor, exteriorColor, smoothstep(1.0 - shellThickness, 1.0, normalizedDistance));
     gl_FragColor = vec4(chosenColor, opacity * fadeFactor);
 }
 `;
