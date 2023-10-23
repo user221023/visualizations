@@ -88,17 +88,29 @@ gui.add(settings, 'slider2', 0.5, 1).onChange(value => {
 });
 
 const uniforms = {
-    exteriorColor: { value: new THREE.Color(0x48dcf6) }, // Replace with your exterior color
-    interiorColor: { value: new THREE.Color(0x9a566f) }, // Replace with your interior color
+    exteriorColor: { value: new THREE.Color(0x48dcf6) },
+    interiorColor: { value: new THREE.Color(0x9a566f) },
     opacity: { value: 0.8 },
-    uniforms.ambientLight = { value: new THREE.Color(ambientLight.color).multiplyScalar(ambientLight.intensity) };
-    uniforms.pointLightPosition = { value: pointLight.position };
-    uniforms.pointLightColor = { value: new THREE.Color(pointLight.color) };
-    uniforms.pointLightIntensity = { value: pointLight.intensity };
-    shellThickness: { value: 0.05 }, // Adjust as necessary
+    shellThickness: { value: 0.05 },
     slider1: { value: settings.slider1 },
-    slider2: { value: settings.slider2 }
+    slider2: { value: settings.slider2 },
+    ambientLight: { value: new THREE.Color(0x404040).multiplyScalar(1) }, // temporary default value
+    pointLightPosition: { value: new THREE.Vector3(0, 0, 10) }, // temporary default value
+    pointLightColor: { value: new THREE.Color(0xffffff) },
+    pointLightIntensity: { value: 5 } // temporary default value
 };
+
+const ambientLight = new THREE.AmbientLight(0x404040);
+scene.add(ambientLight);
+uniforms.ambientLight.value = new THREE.Color(ambientLight.color).multiplyScalar(ambientLight.intensity);
+
+const pointLight = new THREE.PointLight(0xffffff, 5, 100);
+pointLight.position.set(0, 0, 10);
+scene.add(pointLight);
+uniforms.pointLightPosition.value = pointLight.position;
+uniforms.pointLightColor.value = new THREE.Color(pointLight.color);
+uniforms.pointLightIntensity.value = pointLight.intensity;
+
 
 const material = new THREE.ShaderMaterial({
     vertexShader,
