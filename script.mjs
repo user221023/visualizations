@@ -13,6 +13,8 @@ const geometry = new THREE.SphereGeometry(5, 128, 128);
 
 const vertexShader = `
 #version 100
+precision mediump float;
+
 #extension GL_OES_standard_derivatives : enable
 
 varying vec3 vOriginalPosition;
@@ -25,8 +27,8 @@ void main() {
     flattenedPosition.y *= 1.0 - 0.2 * pow(abs(flattenedPosition.y) / 5.0, 2.0); // Adjust flattening
     vPosition = flattenedPosition;
     
-    vec3 dx = vec3(dFdx(flattenedPosition.x), dFdx(flattenedPosition.y), dFdx(flattenedPosition.z));
-    vec3 dy = vec3(dFdy(flattenedPosition.x), dFdy(flattenedPosition.y), dFdy(flattenedPosition.z));
+    vec3 dx = vec3(dFdx(vPosition.x), dFdx(vPosition.y), dFdx(vPosition.z));
+    vec3 dy = vec3(dFdy(vPosition.x), dFdy(vPosition.y), dFdy(vPosition.z));
     vNormal = normalize(cross(dx, dy));
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(flattenedPosition, 1.0);
