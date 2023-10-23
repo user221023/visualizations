@@ -40,17 +40,17 @@ void main() {
 
 const settings = {
     slider1: 0.925,
-    slider2: 50.0,
+    slider2: 95.0,
     slider3: 0.5
 };
 
 // Initialize dat.GUI
 const gui = new dat.GUI();
 
-gui.add(settings, 'slider1', 0, 1).onChange(value => {
+gui.add(settings, 'slider1', 0.5, 1.5).onChange(value => {
     uniforms.slider1.value = value;
 });
-gui.add(settings, 'slider2', 0, 100).onChange(value => {
+gui.add(settings, 'slider2', 50, 150).onChange(value => {
     uniforms.slider2.value = value;
 });
 gui.add(settings, 'slider3', 0, 1).onChange(value => {
