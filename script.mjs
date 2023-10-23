@@ -43,17 +43,20 @@ precision mediump float;
 in vec3 vOriginalPosition;
 in vec3 vPosition;
 in vec3 vNormal;
-// ... other inputs
+uniform vec3 exteriorColor;
+uniform vec3 interiorColor;
+uniform float opacity;
+uniform float shellThickness;
+uniform vec3 ambientLight;
+uniform vec3 pointLightPosition;
+uniform vec3 pointLightColor;
+uniform float pointLightIntensity;
 
 out vec4 fragColor;
 
-void main() {
-    // Fragment shader code
-    // ...
-    fragColor = vec4(vNormal, 1.0);  // Example output
+float sigmoid(float x) {
+    return 1.0 / (1.0 + exp(-x));
 }
-`;
-
 
 void main() {
   float originalDistance = length(vOriginalPosition) / 5.0;
@@ -73,7 +76,7 @@ void main() {
   vec3 ambient = ambientLight * chosenColor;
   vec3 result = (ambient + diffuse) * chosenColor;
   
-  gl_FragColor = vec4(result, opacity * fadeFactor);
+  fragColor = vec4(result, opacity * fadeFactor);
 }
 `;
 
