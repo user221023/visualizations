@@ -24,11 +24,17 @@ const fragmentShader = `
 uniform vec3 color;
 uniform float opacity;
 varying vec3 vPosition;
-void main() {
-  float distanceFromEquator = abs(vPosition.y);
-  float fadeFactor = 1.0 - pow(distanceFromEquator / 5.0, 2.4);
-  gl_FragColor = vec4(color, opacity * fadeFactor);
+
+float sigmoid(float x) {
+    return 1.0 / (1.0 + exp(-10.0 * (x - 0.5)));
 }
+
+void main() {
+    float distanceFromCenter = length(vPosition) / 5.0;
+    float fadeFactor = sigmoid(distanceFromCenter);
+    gl_FragColor = vec4(color, opacity * fadeFactor);
+}
+
 `;
 
     const uniforms = {
