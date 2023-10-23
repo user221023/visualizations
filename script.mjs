@@ -28,7 +28,7 @@ uniform float opacity;
 varying vec3 vPosition;
 
 float sigmoid(float x) {
-    return 1.0 / (1.0 + exp(-1.0 * 95 * (x - 0.95)));
+    return 1.0 / (1.0 + exp(-95.0 * (x - 0.95)));
 }
 
 void main() {
@@ -60,7 +60,7 @@ gui.add(settings, 'slider3', 0, 1).onChange(value => {
 });
 
 const uniforms = {
-    color: { value: new THREE.Color(0x48dcf6) },
+    color: { value: new THREE.Color(0x50fffb) },
     opacity: { value: 0.5 },
     slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 },
