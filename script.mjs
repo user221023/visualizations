@@ -59,7 +59,7 @@ gui.add(settings, 'slider3', 0, 1).onChange(value => {
 
 const uniforms = {
     color: { value: new THREE.Color(0x48dcf6) },
-    opacity: { value: 0.667 },
+    opacity: { value: 0.8 },
     slider1: { value: settings.slider1 },
     slider2: { value: settings.slider2 },
     slider3: { value: settings.slider3 }
