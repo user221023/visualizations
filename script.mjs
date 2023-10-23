@@ -1,12 +1,10 @@
 import * as THREE from './three.module.js';
 import { OrbitControls } from './OrbitControls.js';
 
-const renderer = new THREE.WebGLRenderer();
-console.log(renderer.capabilities.isWebGL2 ? 'WebGL 2' : 'WebGL 1');
-
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+console.log(renderer.capabilities.isWebGL2 ? 'WebGL 2' : 'WebGL 1');
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
