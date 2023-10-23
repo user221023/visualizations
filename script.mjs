@@ -25,7 +25,8 @@
     uniform float opacity;
     varying vec3 vNormal;
     void main() {
-      float intensity = pow(0.5 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+      float intensity = pow(0.5 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 4.0); // Increase the power for a smoother glow
+      intensity = clamp(intensity, 0.0, 1.0); // Clamp the intensity between 0 and 1
       gl_FragColor = vec4(color, opacity) * (intensity + 0.5);
     }
     `;
