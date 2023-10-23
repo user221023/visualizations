@@ -33,7 +33,7 @@ void main() {
 
     const uniforms = {
       color: { value: new THREE.Color(0x48dcf6) },
-      opacity: { value: 0.5 }
+      opacity: { value: 0.4 }
     };
 
     const material = new THREE.ShaderMaterial({
